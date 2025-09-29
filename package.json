@@ -38,6 +38,7 @@
     "nanoid": "^5.0.7",
     "next": "14.2.3",
     "next-pwa": "^5.6.0",
+    "next-themes": "^0.3.0",
     "pino": "^9.1.0",
     "posthog-js": "^1.120.6",
     "react": "18.2.0",
@@ -46,13 +47,12 @@
     "react-swipeable": "^7.0.1",
     "sharp": "^0.33.3",
     "sonner": "^1.5.0",
+    "swr": "^2.2.5",
     "workbox-core": "^7.0.0",
     "workbox-precaching": "^7.0.0",
     "workbox-routing": "^7.0.0",
     "workbox-strategies": "^7.0.0",
-    "zod": "^3.23.8",
-    "swr": "^2.2.5",
-    "next-themes": "^0.3.0"
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@playwright/test": "^1.44.0",
@@ -63,7 +63,7 @@
     "@types/node": "^20.12.7",
     "@types/react": "^18.2.43",
     "@types/react-dom": "^18.2.17",
-    "@types/react-swipeable": "^6.2.5",
+    "@types/react-swipeable": "^5.2.0",
     "@typescript-eslint/eslint-plugin": "^7.8.0",
     "@typescript-eslint/parser": "^7.8.0",
     "autoprefixer": "^10.4.18",
@@ -76,11 +76,11 @@
     "prettier": "^3.2.5",
     "tailwind-merge": "^2.2.1",
     "tailwindcss": "^3.4.3",
+    "tailwindcss-animate": "^1.0.7",
     "ts-node": "^10.9.2",
     "tsx": "^4.7.2",
     "typescript": "^5.4.5",
-    "vitest": "^1.5.0",
-    "tailwindcss-animate": "^1.0.7",
-    "vite-tsconfig-paths": "^4.2.0"
+    "vite-tsconfig-paths": "^4.2.0",
+    "vitest": "^1.5.0"
   }
 }
