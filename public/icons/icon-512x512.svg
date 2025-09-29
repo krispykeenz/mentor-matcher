@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">MentorMatch SA Icon Large</title>
+  <desc id="desc">Stylised heart and cross symbol representing mentorship and healthcare.</desc>
+  <defs>
+    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a" />
+      <stop offset="100%" stop-color="#22d3ee" />
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="84" fill="#eef2ff" />
+  <path fill="url(#gradient)" d="M256 96c-47.5 0-86 38.5-86 86 0 19.2 6.1 36.7 16.7 51.3L244 334.6c2.1 3.1 6.8 3.1 8.9 0l57.3-101.3c10.6-14.6 16.7-32.1 16.7-51.3 0-47.5-38.5-86-86-86zm0 64c12.1 0 22 9.9 22 22s-9.9 22-22 22-22-9.9-22-22 9.9-22 22-22z" />
+  <path fill="#1e293b" d="M336 352h-48v-48c0-6.6-5.4-12-12-12h-52c-6.6 0-12 5.4-12 12v48h-48c-6.6 0-12 5.4-12 12v52c0 6.6 5.4 12 12 12h48v48c0 6.6 5.4 12 12 12h52c6.6 0 12-5.4 12-12v-48h48c6.6 0 12-5.4 12-12v-52c0-6.6-5.4-12-12-12z" />
+</svg>
