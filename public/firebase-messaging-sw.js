@@ -3,7 +3,7 @@ import { initializeApp } from 'firebase/app';
 import { getMessaging, onBackgroundMessage } from 'firebase/messaging/sw';
 
 const config = {
-  apiKey: '',
+  apiKey: 'AIzaSyCNpPquOEWUag8e8e8PJctbnXkPq6l-CqY',
   authDomain: 'mentor-matching-3efb8.firebaseapp.com',
   projectId: 'mentor-matching-3efb8',
   storageBucket: 'mentor-matching-3efb8.firebasestorage.app',

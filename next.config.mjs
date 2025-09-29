@@ -3,9 +3,6 @@ import withPWA from 'next-pwa';
 const isDev = process.env.NODE_ENV === 'development';
 
 const config = {
-  experimental: {
-    serverActions: true,
-  },
   images: {
     remotePatterns: [
       {
