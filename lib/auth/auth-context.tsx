@@ -46,10 +46,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
-  useEffect(() => {
+  const auth = useMemo(() => {
     initializeClientFirebase();
-    const auth = getAuth();
+    return getAuth();
+  }, []);
 
+  useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       if (firebaseUser) {
         const tokenResult = await firebaseUser.getIdTokenResult();
@@ -74,11 +76,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     });
 
     return () => unsubscribe();
-  }, []);
+  }, [auth]);
 
   const value = useMemo<AuthContextValue>(() => {
-    const auth = getAuth();
-
     return {
       user,
       loading,
@@ -97,7 +97,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         window.localStorage.setItem('emailForSignIn', email);
       },
       signInWithMagicLink: async (email: string, link?: string) => {
-        const signInEmail = email || window.localStorage.getItem('emailForSignIn') || '';
+        const signInEmail =
+          email || window.localStorage.getItem('emailForSignIn') || '';
         const href = link || window.location.href;
         if (!isSignInWithEmailLink(auth, href)) throw new Error('Invalid link');
         await signInWithEmailLink(auth, signInEmail, href);
@@ -108,7 +109,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         await signInWithPopup(auth, provider);
       },
     };
-  }, [user, loading, router]);
+  }, [auth, user, loading, router]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

@@ -1,8 +1,9 @@
 'use client';
 
 import { useMemo } from 'react';
-import { Checkbox } from './checkbox';
+import { Check } from 'lucide-react';
 import { Button } from './button';
+import { cn } from '@/lib/utils/cn';
 
 interface Option {
   label: string;
@@ -30,18 +31,31 @@ export function MultiSelect({ values, options, onChange }: MultiSelectProps) {
 
   return (
     <div className="flex flex-wrap gap-2">
-      {options.map((option) => (
-        <Button
-          key={option.value}
-          type="button"
-          variant={selected.has(option.value) ? 'default' : 'outline'}
-          size="sm"
-          onClick={() => toggle(option.value)}
-        >
-          <Checkbox checked={selected.has(option.value)} className="h-3 w-3" />
-          <span>{option.label}</span>
-        </Button>
-      ))}
+      {options.map((option) => {
+        const isSelected = selected.has(option.value);
+        return (
+          <Button
+            key={option.value}
+            type="button"
+            variant={isSelected ? 'default' : 'outline'}
+            size="sm"
+            onClick={() => toggle(option.value)}
+            aria-pressed={isSelected}
+          >
+            <span className="flex items-center gap-2">
+              <span
+                className={cn(
+                  'flex h-3 w-3 items-center justify-center rounded-[4px] border border-slate-300 bg-white text-transparent',
+                  isSelected && 'border-brand-500 bg-brand-500 text-white',
+                )}
+              >
+                <Check className="h-2.5 w-2.5" />
+              </span>
+              <span>{option.label}</span>
+            </span>
+          </Button>
+        );
+      })}
     </div>
   );
 }

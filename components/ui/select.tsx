@@ -64,7 +64,7 @@ const SelectItem = React.forwardRef<
     )}
     {...props}
   >
-    <span className="flex-1">{children}</span>
+    <SelectPrimitive.ItemText className="flex-1">{children}</SelectPrimitive.ItemText>
     <SelectPrimitive.ItemIndicator className="absolute right-3 flex items-center">
       <Check className="h-4 w-4" />
     </SelectPrimitive.ItemIndicator>

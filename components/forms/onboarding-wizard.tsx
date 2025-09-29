@@ -75,6 +75,13 @@ const steps = [
   { id: 3, label: 'Safety' },
 ];
 
+const stepFieldMap: Record<number, string[]> = {
+  0: ['fullName', 'email', 'phone', 'role', 'occupation'],
+  1: ['province', 'city', 'facilityType', 'languages', 'specialties', 'bioShort'],
+  2: ['mentorshipStyle', 'meetingModes', 'mentorPreferences.capacity'],
+  3: ['consentedPolicies', 'ageConfirmed'],
+};
+
 export function OnboardingWizard({ profile }: { profile?: Partial<BaseProfileFormValues> }) {
   const [step, setStep] = useState(0);
   const router = useRouter();
@@ -82,6 +89,23 @@ export function OnboardingWizard({ profile }: { profile?: Partial<BaseProfileFor
     resolver: zodResolver(baseProfileSchema),
     defaultValues: profile ? { ...initialValues, ...profile } : initialValues,
   });
+
+  const consentedPolicies = form.watch('consentedPolicies') ?? false;
+  const ageConfirmed = form.watch('ageConfirmed') ?? false;
+
+  const handlePoliciesConsentChange = (checked: boolean | 'indeterminate') => {
+    const value = checked === true;
+    if (form.getValues('consentedPolicies') !== value) {
+      form.setValue('consentedPolicies', value, { shouldDirty: true, shouldValidate: true });
+    }
+  };
+
+  const handleAgeConfirmedChange = (checked: boolean | 'indeterminate') => {
+    const value = checked === true;
+    if (form.getValues('ageConfirmed') !== value) {
+      form.setValue('ageConfirmed', value, { shouldDirty: true, shouldValidate: true });
+    }
+  };
 
   const mutation = useMutation({
     mutationFn: async (values: BaseProfileFormValues) => {
@@ -105,10 +129,25 @@ export function OnboardingWizard({ profile }: { profile?: Partial<BaseProfileFor
     },
   });
 
-  const nextStep = () => setStep((prev) => Math.min(prev + 1, steps.length - 1));
+  const nextStep = async () => {
+    const fields = stepFieldMap[step] ?? [];
+    if (fields.length) {
+      const isValid = await form.trigger(fields as any, { shouldFocus: true });
+      if (!isValid) {
+        toast.error('Please complete the required fields before continuing.');
+        return;
+      }
+    }
+    setStep((prev) => Math.min(prev + 1, steps.length - 1));
+  };
   const prevStep = () => setStep((prev) => Math.max(prev - 1, 0));
 
-  const onSubmit = form.handleSubmit((values) => mutation.mutate(values));
+  const onSubmit = form.handleSubmit(
+    (values) => mutation.mutate(values),
+    () => {
+      toast.error('Please fix the highlighted fields before continuing.');
+    },
+  );
 
   const progress = ((step + 1) / steps.length) * 100;
 
@@ -303,7 +342,7 @@ export function OnboardingWizard({ profile }: { profile?: Partial<BaseProfileFor
       {step === 3 && (
         <div className="space-y-4">
           <div className="flex items-start gap-3">
-            <Checkbox checked={form.watch('consentedPolicies')} onCheckedChange={(checked) => form.setValue('consentedPolicies', Boolean(checked))} />
+            <Checkbox checked={consentedPolicies} onCheckedChange={handlePoliciesConsentChange} />
             <div className="space-y-1 text-sm">
               <p>
                 I agree to the{' '}
@@ -323,7 +362,7 @@ export function OnboardingWizard({ profile }: { profile?: Partial<BaseProfileFor
             </div>
           </div>
           <div className="flex items-center gap-3 text-sm">
-            <Checkbox checked={form.watch('ageConfirmed')} onCheckedChange={(checked) => form.setValue('ageConfirmed', Boolean(checked))} />
+            <Checkbox checked={ageConfirmed} onCheckedChange={handleAgeConfirmedChange} />
             <span>I confirm I am 18 years or older.</span>
           </div>
         </div>
@@ -334,7 +373,7 @@ export function OnboardingWizard({ profile }: { profile?: Partial<BaseProfileFor
           Back
         </Button>
         {step < steps.length - 1 ? (
-          <Button type="button" onClick={nextStep}>
+          <Button type="button" onClick={() => void nextStep()}>
             Continue
           </Button>
         ) : (
