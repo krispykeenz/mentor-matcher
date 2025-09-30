@@ -6,8 +6,14 @@ export default function SettingsPage() {
     <div className="min-h-screen bg-sand-50">
       <div className="mx-auto w-full max-w-3xl px-4 py-8">
         <h1 className="text-2xl font-semibold text-slate-900">Settings</h1>
-        <p className="text-sm text-slate-600">Manage notifications, privacy, and account controls.</p>
-        <Suspense fallback={<p className="mt-6 text-sm text-slate-500">Loading settings…</p>}>
+        <p className="text-sm text-slate-600">
+          Manage notifications, privacy, and account controls.
+        </p>
+        <Suspense
+          fallback={
+            <p className="mt-6 text-sm text-slate-500">Loading settings…</p>
+          }
+        >
           <SettingsPanel />
         </Suspense>
       </div>

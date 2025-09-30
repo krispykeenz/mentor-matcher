@@ -22,7 +22,17 @@ export const STAGES = [
   'Public Sector',
 ] as const;
 
-export const PROVINCES = ['EC', 'FS', 'GP', 'KZN', 'LP', 'MP', 'NW', 'NC', 'WC'] as const;
+export const PROVINCES = [
+  'EC',
+  'FS',
+  'GP',
+  'KZN',
+  'LP',
+  'MP',
+  'NW',
+  'NC',
+  'WC',
+] as const;
 
 export const FACILITY_TYPES = [
   'Clinic',
@@ -50,7 +60,11 @@ export const LANGUAGES = [
 
 export const MEETING_MODES = ['In-person', 'Virtual', 'Hybrid'] as const;
 
-export const MENTORSHIP_STYLES = ['Directive', 'Collaborative', 'Peer-like'] as const;
+export const MENTORSHIP_STYLES = [
+  'Directive',
+  'Collaborative',
+  'Peer-like',
+] as const;
 
 export const REPORT_CATEGORIES = [
   'Harassment',

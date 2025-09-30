@@ -26,7 +26,9 @@ export function DiscoveryShell({ initialProfiles }: DiscoveryShellProps) {
       });
     }
     const query = params.toString();
-    const response = await fetch(query ? `/api/discovery?${query}` : '/api/discovery');
+    const response = await fetch(
+      query ? `/api/discovery?${query}` : '/api/discovery',
+    );
     const data = await response.json();
     setProfiles(data.profiles ?? []);
   };
@@ -52,7 +54,11 @@ export function DiscoveryShell({ initialProfiles }: DiscoveryShellProps) {
     const response = await fetch('/api/requests', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ receiverUserId: profile.id, message: 'Hi! I would love to connect.', goals: ['General support'] }),
+      body: JSON.stringify({
+        receiverUserId: profile.id,
+        message: 'Hi! I would love to connect.',
+        goals: ['General support'],
+      }),
     });
     if (response.ok) {
       toast.success('Mentorship request sent');
@@ -65,12 +71,21 @@ export function DiscoveryShell({ initialProfiles }: DiscoveryShellProps) {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-semibold text-slate-900">Discover matches</h1>
-          <p className="text-sm text-slate-600">Swipe right to request mentorship, left to skip, star to bookmark.</p>
+          <h1 className="text-2xl font-semibold text-slate-900">
+            Discover matches
+          </h1>
+          <p className="text-sm text-slate-600">
+            Swipe right to request mentorship, left to skip, star to bookmark.
+          </p>
         </div>
         <FiltersDrawer onFilterChange={handleFilters} />
       </div>
-      <SwipeDeck profiles={profiles} onLike={handleLike} onSkip={handleSkip} onSave={handleSave} />
+      <SwipeDeck
+        profiles={profiles}
+        onLike={handleLike}
+        onSkip={handleSkip}
+        onSave={handleSave}
+      />
     </div>
   );
 }

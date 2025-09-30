@@ -17,14 +17,19 @@ const SheetOverlay = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof SheetPrimitive.Overlay>
 >(({ className, ...props }, ref) => (
   <SheetPrimitive.Overlay
-    className={cn('fixed inset-0 z-40 bg-slate-900/30 backdrop-blur-sm data-[state=open]:animate-in data-[state=closed]:animate-out', className)}
+    className={cn(
+      'fixed inset-0 z-40 bg-slate-900/30 backdrop-blur-sm data-[state=open]:animate-in data-[state=closed]:animate-out',
+      className,
+    )}
     {...props}
     ref={ref}
   />
 ));
 SheetOverlay.displayName = SheetPrimitive.Overlay.displayName;
 
-type SheetContentProps = React.ComponentPropsWithoutRef<typeof SheetPrimitive.Content> & {
+type SheetContentProps = React.ComponentPropsWithoutRef<
+  typeof SheetPrimitive.Content
+> & {
   side?: 'left' | 'right' | 'bottom';
 };
 
@@ -38,9 +43,12 @@ const SheetContent = React.forwardRef<
       ref={ref}
       className={cn(
         'fixed z-50 grid h-full w-full max-w-lg gap-4 border border-slate-100 bg-white p-6 shadow-soft transition ease-in-out data-[state=open]:animate-in data-[state=closed]:animate-out',
-        side === 'right' && 'inset-y-0 right-0 data-[state=open]:slide-in-from-right data-[state=closed]:slide-out-to-right',
-        side === 'left' && 'inset-y-0 left-0 data-[state=open]:slide-in-from-left data-[state=closed]:slide-out-to-left',
-        side === 'bottom' && 'inset-x-0 bottom-0 h-auto data-[state=open]:slide-in-from-bottom data-[state=closed]:slide-out-to-bottom',
+        side === 'right' &&
+          'inset-y-0 right-0 data-[state=open]:slide-in-from-right data-[state=closed]:slide-out-to-right',
+        side === 'left' &&
+          'inset-y-0 left-0 data-[state=open]:slide-in-from-left data-[state=closed]:slide-out-to-left',
+        side === 'bottom' &&
+          'inset-x-0 bottom-0 h-auto data-[state=open]:slide-in-from-bottom data-[state=closed]:slide-out-to-bottom',
         className,
       )}
       {...props}
@@ -51,19 +59,35 @@ const SheetContent = React.forwardRef<
 ));
 SheetContent.displayName = SheetPrimitive.Content.displayName;
 
-const SheetHeader = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
+const SheetHeader = ({
+  className,
+  ...props
+}: React.HTMLAttributes<HTMLDivElement>) => (
   <div className={cn('space-y-2 text-left', className)} {...props} />
 );
 
-const SheetFooter = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
-  <div className={cn('mt-auto flex flex-col gap-2 sm:flex-row sm:justify-end', className)} {...props} />
+const SheetFooter = ({
+  className,
+  ...props
+}: React.HTMLAttributes<HTMLDivElement>) => (
+  <div
+    className={cn(
+      'mt-auto flex flex-col gap-2 sm:flex-row sm:justify-end',
+      className,
+    )}
+    {...props}
+  />
 );
 
 const SheetTitle = React.forwardRef<
   React.ElementRef<typeof SheetPrimitive.Title>,
   React.ComponentPropsWithoutRef<typeof SheetPrimitive.Title>
 >(({ className, ...props }, ref) => (
-  <SheetPrimitive.Title ref={ref} className={cn('text-lg font-semibold text-slate-900', className)} {...props} />
+  <SheetPrimitive.Title
+    ref={ref}
+    className={cn('text-lg font-semibold text-slate-900', className)}
+    {...props}
+  />
 ));
 SheetTitle.displayName = SheetPrimitive.Title.displayName;
 
@@ -79,4 +103,15 @@ const SheetDescription = React.forwardRef<
 ));
 SheetDescription.displayName = SheetPrimitive.Description.displayName;
 
-export { Sheet, SheetPortal, SheetOverlay, SheetTrigger, SheetClose, SheetContent, SheetHeader, SheetFooter, SheetTitle, SheetDescription };
+export {
+  Sheet,
+  SheetPortal,
+  SheetOverlay,
+  SheetTrigger,
+  SheetClose,
+  SheetContent,
+  SheetHeader,
+  SheetFooter,
+  SheetTitle,
+  SheetDescription,
+};

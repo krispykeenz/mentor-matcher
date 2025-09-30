@@ -46,7 +46,9 @@ const SelectContent = React.forwardRef<
       position={position}
       {...props}
     >
-      <SelectPrimitive.Viewport className="p-2">{children}</SelectPrimitive.Viewport>
+      <SelectPrimitive.Viewport className="p-2">
+        {children}
+      </SelectPrimitive.Viewport>
     </SelectPrimitive.Content>
   </SelectPrimitive.Portal>
 ));
@@ -64,7 +66,9 @@ const SelectItem = React.forwardRef<
     )}
     {...props}
   >
-    <SelectPrimitive.ItemText className="flex-1">{children}</SelectPrimitive.ItemText>
+    <SelectPrimitive.ItemText className="flex-1">
+      {children}
+    </SelectPrimitive.ItemText>
     <SelectPrimitive.ItemIndicator className="absolute right-3 flex items-center">
       <Check className="h-4 w-4" />
     </SelectPrimitive.ItemIndicator>
@@ -72,4 +76,11 @@ const SelectItem = React.forwardRef<
 ));
 SelectItem.displayName = SelectPrimitive.Item.displayName;
 
-export { Select, SelectGroup, SelectValue, SelectTrigger, SelectContent, SelectItem };
+export {
+  Select,
+  SelectGroup,
+  SelectValue,
+  SelectTrigger,
+  SelectContent,
+  SelectItem,
+};

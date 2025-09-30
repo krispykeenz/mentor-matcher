@@ -18,7 +18,11 @@ describe('scoreCandidate', () => {
       city: 'Cape Town',
       languages: ['English'],
       specialties: ['Musculoskeletal'],
-      mentorPreferences: { capacity: 3, acceptedCount: 1, preferredTimes: ['Evenings'] },
+      mentorPreferences: {
+        capacity: 3,
+        acceptedCount: 1,
+        preferredTimes: ['Evenings'],
+      },
     };
     const score = scoreCandidate(viewer as any, candidate as any);
     expect(score).toBeGreaterThan(0);

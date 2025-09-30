@@ -29,6 +29,9 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ profiles });
   } catch (error) {
     console.error(error);
-    return NextResponse.json({ error: 'Failed to fetch discovery feed' }, { status: 400 });
+    return NextResponse.json(
+      { error: 'Failed to fetch discovery feed' },
+      { status: 400 },
+    );
   }
 }

@@ -20,4 +20,3 @@ onBackgroundMessage(messaging, ({ notification }) => {
     icon: '/icons/icon-192.png',
   });
 });
-

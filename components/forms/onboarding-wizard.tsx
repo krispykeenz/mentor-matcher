@@ -3,15 +3,30 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { baseProfileSchema, type BaseProfileFormValues } from '@/lib/utils/schemas';
+import {
+  baseProfileSchema,
+  type BaseProfileFormValues,
+} from '@/lib/utils/schemas';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
 import { ProgressBar } from '@/components/ui/progress';
-import { OCCUPATIONS, PROVINCES, LANGUAGES, FACILITY_TYPES, MENTORSHIP_STYLES } from '@/lib/const/enums';
+import {
+  OCCUPATIONS,
+  PROVINCES,
+  LANGUAGES,
+  FACILITY_TYPES,
+  MENTORSHIP_STYLES,
+} from '@/lib/const/enums';
 import { MultiSelect } from '@/components/ui/multi-select';
 import { useMutation } from '@tanstack/react-query';
 import { toast } from 'sonner';
@@ -54,12 +69,23 @@ const initialValues: BaseProfileFormValues = {
   education: [],
   experience: [],
   certifications: [],
-  links: { linkedin: undefined, website: undefined, calendar: undefined, research: undefined },
+  links: {
+    linkedin: undefined,
+    website: undefined,
+    calendar: undefined,
+    research: undefined,
+  },
   discoverable: true,
   consentShareProfile: false,
   meetingModes: ['Virtual'],
   mentorshipStyle: 'Collaborative',
-  mentorPreferences: { capacity: 1, expectedCommitment: '', preferredDays: [], preferredTimes: [], locations: [] },
+  mentorPreferences: {
+    capacity: 1,
+    expectedCommitment: '',
+    preferredDays: [],
+    preferredTimes: [],
+    locations: [],
+  },
   menteeGoals: [],
   menteeAvailability: [],
   meetingModePreference: 'Virtual',
@@ -77,12 +103,23 @@ const steps = [
 
 const stepFieldMap: Record<number, string[]> = {
   0: ['fullName', 'email', 'phone', 'role', 'occupation'],
-  1: ['province', 'city', 'facilityType', 'languages', 'specialties', 'bioShort'],
+  1: [
+    'province',
+    'city',
+    'facilityType',
+    'languages',
+    'specialties',
+    'bioShort',
+  ],
   2: ['mentorshipStyle', 'meetingModes', 'mentorPreferences.capacity'],
   3: ['consentedPolicies', 'ageConfirmed'],
 };
 
-export function OnboardingWizard({ profile }: { profile?: Partial<BaseProfileFormValues> }) {
+export function OnboardingWizard({
+  profile,
+}: {
+  profile?: Partial<BaseProfileFormValues>;
+}) {
   const [step, setStep] = useState(0);
   const router = useRouter();
   const form = useForm<BaseProfileFormValues>({
@@ -96,14 +133,20 @@ export function OnboardingWizard({ profile }: { profile?: Partial<BaseProfileFor
   const handlePoliciesConsentChange = (checked: boolean | 'indeterminate') => {
     const value = checked === true;
     if (form.getValues('consentedPolicies') !== value) {
-      form.setValue('consentedPolicies', value, { shouldDirty: true, shouldValidate: true });
+      form.setValue('consentedPolicies', value, {
+        shouldDirty: true,
+        shouldValidate: true,
+      });
     }
   };
 
   const handleAgeConfirmedChange = (checked: boolean | 'indeterminate') => {
     const value = checked === true;
     if (form.getValues('ageConfirmed') !== value) {
-      form.setValue('ageConfirmed', value, { shouldDirty: true, shouldValidate: true });
+      form.setValue('ageConfirmed', value, {
+        shouldDirty: true,
+        shouldValidate: true,
+      });
     }
   };
 
@@ -156,10 +199,16 @@ export function OnboardingWizard({ profile }: { profile?: Partial<BaseProfileFor
       <div className="space-y-3">
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-xs uppercase tracking-wide text-brand-600">Onboarding</p>
-            <h2 className="text-xl font-semibold text-slate-900">{steps[step]?.label}</h2>
+            <p className="text-xs uppercase tracking-wide text-brand-600">
+              Onboarding
+            </p>
+            <h2 className="text-xl font-semibold text-slate-900">
+              {steps[step]?.label}
+            </h2>
           </div>
-          <span className="text-sm text-slate-500">Step {step + 1} of {steps.length}</span>
+          <span className="text-sm text-slate-500">
+            Step {step + 1} of {steps.length}
+          </span>
         </div>
         <ProgressBar value={progress} />
       </div>
@@ -169,7 +218,9 @@ export function OnboardingWizard({ profile }: { profile?: Partial<BaseProfileFor
           <div className="space-y-2">
             <Label htmlFor="fullName">Full name</Label>
             <Input id="fullName" {...form.register('fullName')} />
-            <p className="text-xs text-red-500">{form.formState.errors.fullName?.message}</p>
+            <p className="text-xs text-red-500">
+              {form.formState.errors.fullName?.message}
+            </p>
           </div>
           <div className="space-y-2">
             <Label htmlFor="preferredName">Preferred name</Label>
@@ -178,18 +229,25 @@ export function OnboardingWizard({ profile }: { profile?: Partial<BaseProfileFor
           <div className="space-y-2">
             <Label htmlFor="email">Email</Label>
             <Input id="email" type="email" {...form.register('email')} />
-            <p className="text-xs text-red-500">{form.formState.errors.email?.message}</p>
+            <p className="text-xs text-red-500">
+              {form.formState.errors.email?.message}
+            </p>
           </div>
           <div className="space-y-2">
             <Label htmlFor="phone">Phone</Label>
             <Input id="phone" placeholder="+27" {...form.register('phone')} />
-            <p className="text-xs text-red-500">{form.formState.errors.phone?.message}</p>
+            <p className="text-xs text-red-500">
+              {form.formState.errors.phone?.message}
+            </p>
           </div>
           <div className="space-y-2">
             <Label>Role</Label>
             <div className="flex gap-3">
               {['Mentor', 'Mentee', 'Both'].map((role) => (
-                <label key={role} className="flex items-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-2">
+                <label
+                  key={role}
+                  className="flex items-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-2"
+                >
                   <input type="radio" value={role} {...form.register('role')} />
                   <span className="text-sm">{role}</span>
                 </label>
@@ -198,7 +256,12 @@ export function OnboardingWizard({ profile }: { profile?: Partial<BaseProfileFor
           </div>
           <div className="space-y-2">
             <Label htmlFor="occupation">Occupation</Label>
-            <Select value={form.watch('occupation')} onValueChange={(value) => form.setValue('occupation', value as any)}>
+            <Select
+              value={form.watch('occupation')}
+              onValueChange={(value) =>
+                form.setValue('occupation', value as any)
+              }
+            >
               <SelectTrigger>
                 <SelectValue placeholder="Select occupation" />
               </SelectTrigger>
@@ -218,7 +281,10 @@ export function OnboardingWizard({ profile }: { profile?: Partial<BaseProfileFor
         <div className="grid gap-6 md:grid-cols-2">
           <div className="space-y-2">
             <Label htmlFor="province">Province</Label>
-            <Select value={form.watch('province')} onValueChange={(value) => form.setValue('province', value as any)}>
+            <Select
+              value={form.watch('province')}
+              onValueChange={(value) => form.setValue('province', value as any)}
+            >
               <SelectTrigger>
                 <SelectValue placeholder="Select province" />
               </SelectTrigger>
@@ -239,7 +305,9 @@ export function OnboardingWizard({ profile }: { profile?: Partial<BaseProfileFor
             <Label htmlFor="facilityType">Facility Type</Label>
             <Select
               value={form.watch('facilityType')}
-              onValueChange={(value) => form.setValue('facilityType', value as any)}
+              onValueChange={(value) =>
+                form.setValue('facilityType', value as any)
+              }
             >
               <SelectTrigger>
                 <SelectValue placeholder="Select facility type" />
@@ -257,7 +325,10 @@ export function OnboardingWizard({ profile }: { profile?: Partial<BaseProfileFor
             <Label>Languages</Label>
             <MultiSelect
               values={form.watch('languages')}
-              options={LANGUAGES.map((language) => ({ label: language, value: language }))}
+              options={LANGUAGES.map((language) => ({
+                label: language,
+                value: language,
+              }))}
               onChange={(values) => form.setValue('languages', values as any)}
             />
           </div>
@@ -265,14 +336,19 @@ export function OnboardingWizard({ profile }: { profile?: Partial<BaseProfileFor
             <Label>Specialties</Label>
             <MultiSelect
               values={form.watch('specialties')}
-              options={specialtiesList.map((specialty) => ({ label: specialty, value: specialty }))}
+              options={specialtiesList.map((specialty) => ({
+                label: specialty,
+                value: specialty,
+              }))}
               onChange={(values) => form.setValue('specialties', values)}
             />
           </div>
           <div className="space-y-2 md:col-span-2">
             <Label htmlFor="bioShort">Short bio</Label>
             <Textarea id="bioShort" rows={3} {...form.register('bioShort')} />
-            <p className="text-xs text-red-500">{form.formState.errors.bioShort?.message}</p>
+            <p className="text-xs text-red-500">
+              {form.formState.errors.bioShort?.message}
+            </p>
           </div>
         </div>
       )}
@@ -283,7 +359,9 @@ export function OnboardingWizard({ profile }: { profile?: Partial<BaseProfileFor
             <Label htmlFor="mentorshipStyle">Preferred mentorship style</Label>
             <Select
               value={form.watch('mentorshipStyle') || 'Collaborative'}
-              onValueChange={(value) => form.setValue('mentorshipStyle', value as any)}
+              onValueChange={(value) =>
+                form.setValue('mentorshipStyle', value as any)
+              }
             >
               <SelectTrigger>
                 <SelectValue placeholder="Select style" />
@@ -310,7 +388,9 @@ export function OnboardingWizard({ profile }: { profile?: Partial<BaseProfileFor
                 { label: 'Virtual', value: 'Virtual' },
                 { label: 'Hybrid', value: 'Hybrid' },
               ]}
-              onChange={(values) => form.setValue('meetingModes', values as any)}
+              onChange={(values) =>
+                form.setValue('meetingModes', values as any)
+              }
             />
           </div>
           {form.watch('role') !== 'Mentee' && (
@@ -321,7 +401,9 @@ export function OnboardingWizard({ profile }: { profile?: Partial<BaseProfileFor
                 type="number"
                 min={1}
                 max={20}
-                {...form.register('mentorPreferences.capacity', { valueAsNumber: true })}
+                {...form.register('mentorPreferences.capacity', {
+                  valueAsNumber: true,
+                })}
               />
             </div>
           )}
@@ -332,7 +414,12 @@ export function OnboardingWizard({ profile }: { profile?: Partial<BaseProfileFor
                 rows={4}
                 placeholder="Share your goals, e.g. developing rural rehab pathways, preparing for exit exams…"
                 value={(form.watch('menteeGoals') ?? []).join('\n')}
-                onChange={(event) => form.setValue('menteeGoals', event.target.value.split('\n').filter(Boolean))}
+                onChange={(event) =>
+                  form.setValue(
+                    'menteeGoals',
+                    event.target.value.split('\n').filter(Boolean),
+                  )
+                }
               />
             </div>
           )}
@@ -342,7 +429,10 @@ export function OnboardingWizard({ profile }: { profile?: Partial<BaseProfileFor
       {step === 3 && (
         <div className="space-y-4">
           <div className="flex items-start gap-3">
-            <Checkbox checked={consentedPolicies} onCheckedChange={handlePoliciesConsentChange} />
+            <Checkbox
+              checked={consentedPolicies}
+              onCheckedChange={handlePoliciesConsentChange}
+            />
             <div className="space-y-1 text-sm">
               <p>
                 I agree to the{' '}
@@ -362,14 +452,22 @@ export function OnboardingWizard({ profile }: { profile?: Partial<BaseProfileFor
             </div>
           </div>
           <div className="flex items-center gap-3 text-sm">
-            <Checkbox checked={ageConfirmed} onCheckedChange={handleAgeConfirmedChange} />
+            <Checkbox
+              checked={ageConfirmed}
+              onCheckedChange={handleAgeConfirmedChange}
+            />
             <span>I confirm I am 18 years or older.</span>
           </div>
         </div>
       )}
 
       <div className="flex justify-between">
-        <Button type="button" variant="ghost" onClick={prevStep} disabled={step === 0}>
+        <Button
+          type="button"
+          variant="ghost"
+          onClick={prevStep}
+          disabled={step === 0}
+        >
           Back
         </Button>
         {step < steps.length - 1 ? (

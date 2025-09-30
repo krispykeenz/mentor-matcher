@@ -9,7 +9,9 @@ export async function POST(request: NextRequest) {
     const auth = getAuth();
     const decoded = await auth.verifyIdToken(idToken);
     const expiresIn = 60 * 60 * 24 * 5 * 1000; // 5 days
-    const sessionCookie = await auth.createSessionCookie(idToken, { expiresIn });
+    const sessionCookie = await auth.createSessionCookie(idToken, {
+      expiresIn,
+    });
     cookies().set({
       name: '__session',
       value: sessionCookie,
@@ -41,6 +43,9 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ status: 'ok' });
   } catch (error) {
     console.error('post-login error', error);
-    return NextResponse.json({ error: 'Failed to create session' }, { status: 400 });
+    return NextResponse.json(
+      { error: 'Failed to create session' },
+      { status: 400 },
+    );
   }
 }

@@ -30,6 +30,9 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ id: ref.id });
   } catch (error) {
     console.error(error);
-    return NextResponse.json({ error: 'Unable to submit report' }, { status: 400 });
+    return NextResponse.json(
+      { error: 'Unable to submit report' },
+      { status: 400 },
+    );
   }
 }

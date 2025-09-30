@@ -4,7 +4,13 @@ import { useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 
-export function MessageInput({ onSend, disabled }: { onSend: (body: string) => Promise<void> | void; disabled?: boolean }) {
+export function MessageInput({
+  onSend,
+  disabled,
+}: {
+  onSend: (body: string) => Promise<void> | void;
+  disabled?: boolean;
+}) {
   const [value, setValue] = useState('');
 
   const handleSubmit = async (event: React.FormEvent) => {

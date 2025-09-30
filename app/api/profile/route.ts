@@ -21,7 +21,10 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ status: 'ok' });
   } catch (error) {
     console.error(error);
-    return NextResponse.json({ error: 'Unable to save profile' }, { status: 400 });
+    return NextResponse.json(
+      { error: 'Unable to save profile' },
+      { status: 400 },
+    );
   }
 }
 

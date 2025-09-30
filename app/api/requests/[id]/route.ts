@@ -2,7 +2,10 @@ import { NextResponse, type NextRequest } from 'next/server';
 import { getAdminServices } from '@/lib/firebase/server';
 import { getAuth } from 'firebase-admin/auth';
 import { cookies } from 'next/headers';
-import { sendPushNotification, sendEmailNotification } from '@/lib/server/notifications';
+import {
+  sendPushNotification,
+  sendEmailNotification,
+} from '@/lib/server/notifications';
 
 async function requireUser() {
   const session = cookies().get('__session');
@@ -12,7 +15,10 @@ async function requireUser() {
   return decoded.uid;
 }
 
-export async function PATCH(request: NextRequest, { params }: { params: { id: string } }) {
+export async function PATCH(
+  request: NextRequest,
+  { params }: { params: { id: string } },
+) {
   try {
     const userId = await requireUser();
     const { status } = await request.json();
@@ -43,12 +49,22 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
         startedAt: new Date().toISOString(),
         status: 'active',
       });
-      await sendPushNotification(data.senderUserId, { title: 'Mentorship match!', body: 'Your request was accepted.' });
-      await sendEmailNotification(data.senderEmail ?? '', 'Mentorship match confirmed', 'Your mentorship request has been accepted.');
+      await sendPushNotification(data.senderUserId, {
+        title: 'Mentorship match!',
+        body: 'Your request was accepted.',
+      });
+      await sendEmailNotification(
+        data.senderEmail ?? '',
+        'Mentorship match confirmed',
+        'Your mentorship request has been accepted.',
+      );
     }
     return NextResponse.json({ status: 'ok' });
   } catch (error) {
     console.error(error);
-    return NextResponse.json({ error: 'Unable to update request' }, { status: 400 });
+    return NextResponse.json(
+      { error: 'Unable to update request' },
+      { status: 400 },
+    );
   }
 }

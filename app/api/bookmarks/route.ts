@@ -16,17 +16,17 @@ export async function POST(request: NextRequest) {
     const userId = await requireUser();
     const { targetUserId } = await request.json();
     const { db } = getAdminServices();
-    await db
-      .collection('bookmarks')
-      .doc(`${userId}_${targetUserId}`)
-      .set({
-        userId,
-        targetUserId,
-        createdAt: new Date().toISOString(),
-      });
+    await db.collection('bookmarks').doc(`${userId}_${targetUserId}`).set({
+      userId,
+      targetUserId,
+      createdAt: new Date().toISOString(),
+    });
     return NextResponse.json({ status: 'ok' });
   } catch (error) {
     console.error(error);
-    return NextResponse.json({ error: 'Unable to save bookmark' }, { status: 400 });
+    return NextResponse.json(
+      { error: 'Unable to save bookmark' },
+      { status: 400 },
+    );
   }
 }

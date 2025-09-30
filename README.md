@@ -3,6 +3,7 @@
 MentorMatch SA is a mobile-first mentorship platform for South African community-service health professionals. Built with Next.js 14, TypeScript, Tailwind CSS, shadcn/ui-inspired components, and Firebase services, it delivers swipe-style discovery, structured mentorship workflows, and POPIA-aligned privacy controls.
 
 ## Table of contents
+
 - [Architecture](#architecture)
 - [Features](#features)
 - [Getting started](#getting-started)
@@ -18,6 +19,7 @@ MentorMatch SA is a mobile-first mentorship platform for South African community
 - [Troubleshooting](#troubleshooting)
 
 ## Architecture
+
 - **Next.js 14 App Router** with React Server Components and TypeScript.
 - **Firebase Auth** (passwordless, OAuth ready) and Firestore for data storage.
 - **Firestore data model** covering users, public profiles, requests, matches, messages, reports, bookmarks, onboarding, and admin feature flags.
@@ -28,6 +30,7 @@ MentorMatch SA is a mobile-first mentorship platform for South African community
 - **PWA** shell with offline caching powered by Workbox.
 
 High-level diagram:
+
 ```
 [Next.js App Router]
   ├─ UI (Tailwind, shadcn/ui)
@@ -40,6 +43,7 @@ High-level diagram:
 ```
 
 ## Features
+
 - Marketing landing page with legal pages and contact.
 - Passwordless auth (magic link) and optional Google OAuth (toggle).
 - Onboarding wizard enforcing required profile fields and consent.
@@ -51,13 +55,16 @@ High-level diagram:
 - Accessibility-first components (labels, focus states, semantic HTML).
 
 ## Getting started
+
 ```bash
 npm install
 npm run dev
 ```
+
 The app starts on `http://localhost:3000`.
 
 ### Firebase setup
+
 1. Create a Firebase project and enable **Authentication (Email link, Google)**, **Firestore**, **Storage**, and **Cloud Messaging**.
 2. Create a web app and copy the client credentials into `.env.local` (see below).
 3. Generate a service account key (JSON) for server-side admin access. Store the values in `.env.local`.
@@ -66,9 +73,11 @@ The app starts on `http://localhost:3000`.
 6. Upload placeholder icons to Storage if desired; default icons are bundled.
 
 ### Optional FCM setup
+
 - Upload the generated `firebase-messaging-sw.js` to `public/` if using push messaging. The stub `sendPushNotification` logs events when credentials are not configured.
 
 ## Environment variables
+
 Create `.env.local` from `.env.example`:
 
 ```
@@ -90,6 +99,7 @@ RESEND_API_KEY=
 The Firebase private key must keep newline escapes (`\n`).
 
 ## Development workflow
+
 - `npm run dev` – start Next.js with live reload.
 - `npm run lint` – lint with ESLint + Next.js config.
 - `npm run typecheck` – strict TypeScript checking.
@@ -98,11 +108,13 @@ The Firebase private key must keep newline escapes (`\n`).
 - `npm run seed` – seed demo data into the configured Firebase project (requires Admin credentials).
 
 ## Testing
+
 - **Unit tests**: `tests/__tests__/matching.test.ts` covers matching weights.
 - **Component tests**: Add more under `tests/` using React Testing Library.
 - **Playwright**: `tests/e2e/smoke.spec.ts` verifies landing page rendering across desktop & mobile viewports.
 
 ## Seeding demo data
+
 The seed script adds 30+ demo users across occupations, provinces, and languages.
 
 ```bash
@@ -110,12 +122,15 @@ FIREBASE_PROJECT_ID=... FIREBASE_CLIENT_EMAIL=... FIREBASE_PRIVATE_KEY="..." npm
 ```
 
 ## Progressive Web App
+
 - `manifest.webmanifest` and icons included in `/public`.
 - Workbox-powered `public/sw.js` precaches the Next.js build output and caches documents, scripts, styles, and images via `StaleWhileRevalidate`.
 - Next-PWA registers the service worker automatically in production builds (`npm run build`).
 
 ## Deployment
+
 ### Vercel + Firebase
+
 1. Push the repository to GitHub and import into Vercel.
 2. Set environment variables in Vercel (same as `.env.local`).
 3. Add `FIREBASE_PRIVATE_KEY` with newline escapes, and `RESEND_API_KEY` if using email notifications.
@@ -123,12 +138,14 @@ FIREBASE_PROJECT_ID=... FIREBASE_CLIENT_EMAIL=... FIREBASE_PRIVATE_KEY="..." npm
 5. Deploy – Vercel runs `npm install && npm run build`.
 
 ### Firebase configuration
+
 - Firestore indexes (create via Firebase console or `firebase indexes`):
   - `profiles_public`: `discoverable` ASC, `province` ASC, `occupation` ASC
   - `profiles_public`: `discoverable` ASC, `languages` ARRAY
   - `requests`: `receiverUserId` ASC, `status` ASC
   - `matches`: `participants` ARRAY
 - Storage rules example:
+
 ```javascript
 rules_version = '2';
 service firebase.storage {
@@ -140,7 +157,9 @@ service firebase.storage {
   }
 }
 ```
+
 - Firestore rules scaffold:
+
 ```javascript
 rules_version = '2';
 service cloud.firestore {
@@ -176,10 +195,13 @@ service cloud.firestore {
 ```
 
 ## Switching to Supabase
+
 The repository pattern isolates Firestore access in `lib/server`. To use Supabase:
+
 1. Replace Firebase admin calls with Supabase client queries in the repository files.
 2. Update `lib/firebase/client.ts` with Supabase Auth helpers (or create `lib/supabase`).
 3. Provide equivalent SQL schema (example):
+
 ```sql
 create table profiles (
   id uuid primary key,
@@ -219,17 +241,20 @@ create table messages (
   created_at timestamptz default now()
 );
 ```
+
 4. Configure Supabase Row-Level Security to mirror the Firestore rules.
 
 ## CI
+
 GitHub Actions workflow (`.github/workflows/ci.yml`) runs linting, type checks, Vitest, and Playwright smoke tests on every push and PR.
 
 ## Firestore indexes & rules
+
 See the **Deployment** section. The `lib/server/repositories` include comments for needed indexes.
 
 ## Troubleshooting
+
 - **Firebase admin errors**: confirm `FIREBASE_PRIVATE_KEY` retains newline escapes and the service account has Firestore + Auth admin roles.
 - **Magic link auth**: ensure the email link redirect URL matches `NEXT_PUBLIC_SITE_URL` or use the default site origin.
 - **PWA testing**: run `npm run build && npm run start` to test service worker registration locally.
 - **Playwright**: run `npx playwright install` once before executing `npm run e2e`.
-

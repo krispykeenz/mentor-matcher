@@ -13,7 +13,10 @@ async function requireUser() {
   return decoded.uid;
 }
 
-export async function POST(request: NextRequest, { params }: { params: { id: string } }) {
+export async function POST(
+  request: NextRequest,
+  { params }: { params: { id: string } },
+) {
   try {
     const userId = await requireUser();
     const payload = matchMessageSchema.parse(await request.json());
@@ -38,11 +41,17 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
       readBy: [userId],
     });
     const target = match.mentorId === userId ? match.menteeId : match.mentorId;
-    await sendPushNotification(target, { title: 'New message', body: payload.body.slice(0, 120) });
+    await sendPushNotification(target, {
+      title: 'New message',
+      body: payload.body.slice(0, 120),
+    });
     return NextResponse.json({ id: messagesRef.id });
   } catch (error) {
     console.error(error);
-    return NextResponse.json({ error: 'Unable to send message' }, { status: 400 });
+    return NextResponse.json(
+      { error: 'Unable to send message' },
+      { status: 400 },
+    );
   }
 }
 
@@ -67,9 +76,14 @@ export async function GET(
       .orderBy('createdAt', 'asc')
       .limit(200)
       .get();
-    return NextResponse.json({ messages: messagesSnapshot.docs.map((doc) => doc.data()) });
+    return NextResponse.json({
+      messages: messagesSnapshot.docs.map((doc) => doc.data()),
+    });
   } catch (error) {
     console.error(error);
-    return NextResponse.json({ error: 'Unable to fetch messages' }, { status: 400 });
+    return NextResponse.json(
+      { error: 'Unable to fetch messages' },
+      { status: 400 },
+    );
   }
 }

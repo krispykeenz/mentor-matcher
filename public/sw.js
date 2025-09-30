@@ -5,11 +5,14 @@ import { StaleWhileRevalidate } from 'workbox-strategies';
 precacheAndRoute(self.__WB_MANIFEST || []);
 
 registerRoute(
-  ({ request }) => request.destination === 'document' || request.destination === 'script' || request.destination === 'style',
-  new StaleWhileRevalidate({})
+  ({ request }) =>
+    request.destination === 'document' ||
+    request.destination === 'script' ||
+    request.destination === 'style',
+  new StaleWhileRevalidate({}),
 );
 
 registerRoute(
   ({ request }) => request.destination === 'image',
-  new StaleWhileRevalidate({})
+  new StaleWhileRevalidate({}),
 );

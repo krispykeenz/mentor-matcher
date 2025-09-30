@@ -28,7 +28,9 @@ export function ProfileCard({ profile }: Props) {
         <div className="flex items-center gap-3">
           <Avatar src={profile.photoUrl} alt={profile.fullName} />
           <div className="space-y-1">
-            <h3 className="text-lg font-semibold text-slate-900">{profile.fullName}</h3>
+            <h3 className="text-lg font-semibold text-slate-900">
+              {profile.fullName}
+            </h3>
             <p className="text-sm text-slate-500">
               {profile.occupation} · {profile.province}
             </p>
@@ -42,7 +44,10 @@ export function ProfileCard({ profile }: Props) {
         </div>
         <div className="flex flex-wrap gap-2 text-xs text-slate-500">
           {profile.languages.map((language) => (
-            <span key={language} className="rounded-full bg-slate-100 px-3 py-1">
+            <span
+              key={language}
+              className="rounded-full bg-slate-100 px-3 py-1"
+            >
               {language}
             </span>
           ))}

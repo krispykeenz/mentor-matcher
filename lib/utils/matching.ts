@@ -15,7 +15,10 @@ const defaultWeights = {
 };
 
 export function scoreCandidate(
-  viewer: Partial<BaseProfileFormValues> & { id?: string; analytics?: { likesSent?: number } },
+  viewer: Partial<BaseProfileFormValues> & {
+    id?: string;
+    analytics?: { likesSent?: number };
+  },
   candidate: Partial<BaseProfileFormValues> & {
     id?: string;
     createdAt?: string | number;
@@ -28,7 +31,11 @@ export function scoreCandidate(
   const weights = { ...defaultWeights, ...context.weights };
   let score = 0;
 
-  if (viewer.occupation && candidate.occupation && viewer.occupation === candidate.occupation) {
+  if (
+    viewer.occupation &&
+    candidate.occupation &&
+    viewer.occupation === candidate.occupation
+  ) {
     score += weights.occupation;
   }
 
@@ -39,32 +46,46 @@ export function scoreCandidate(
     }
   }
 
-  const sharedLanguages = intersect(viewer.languages ?? [], candidate.languages ?? []);
+  const sharedLanguages = intersect(
+    viewer.languages ?? [],
+    candidate.languages ?? [],
+  );
   if (sharedLanguages.length) {
     score += weights.languages * sharedLanguages.length;
   }
 
-  const sharedSpecialties = intersect(viewer.specialties ?? [], candidate.specialties ?? []);
+  const sharedSpecialties = intersect(
+    viewer.specialties ?? [],
+    candidate.specialties ?? [],
+  );
   if (sharedSpecialties.length) {
     score += weights.specialties * sharedSpecialties.length;
   }
 
   if (candidate.mentorPreferences?.capacity) {
     const remaining = Math.max(
-      candidate.mentorPreferences.capacity - (candidate.mentorPreferences.acceptedCount ?? 0),
+      candidate.mentorPreferences.capacity -
+        (candidate.mentorPreferences.acceptedCount ?? 0),
       0,
     );
-    score += weights.mentorCapacity * Math.min(remaining, candidate.mentorPreferences.capacity);
+    score +=
+      weights.mentorCapacity *
+      Math.min(remaining, candidate.mentorPreferences.capacity);
   }
 
   if (candidate.createdAt) {
-    const ageInDays = (Date.now() - new Date(candidate.createdAt).getTime()) / (1000 * 60 * 60 * 24);
+    const ageInDays =
+      (Date.now() - new Date(candidate.createdAt).getTime()) /
+      (1000 * 60 * 60 * 24);
     if (ageInDays < 14) {
       score += weights.newUserBonus;
     }
   }
 
-  if (viewer['menteeAvailability'] && candidate['mentorPreferences']?.preferredTimes) {
+  if (
+    viewer['menteeAvailability'] &&
+    candidate['mentorPreferences']?.preferredTimes
+  ) {
     const sharedAvailability = intersect(
       viewer['menteeAvailability'] as string[],
       (candidate['mentorPreferences']?.preferredTimes as string[]) ?? [],

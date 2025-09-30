@@ -20,15 +20,29 @@ export async function GET() {
       .where('participants', 'array-contains', userId)
       .get();
     if (!snapshot.empty) {
-      return NextResponse.json({ matches: snapshot.docs.map((doc) => doc.data()) });
+      return NextResponse.json({
+        matches: snapshot.docs.map((doc) => doc.data()),
+      });
     }
-    const asMentor = await db.collection('matches').where('mentorId', '==', userId).get();
-    const asMentee = await db.collection('matches').where('menteeId', '==', userId).get();
+    const asMentor = await db
+      .collection('matches')
+      .where('mentorId', '==', userId)
+      .get();
+    const asMentee = await db
+      .collection('matches')
+      .where('menteeId', '==', userId)
+      .get();
     return NextResponse.json({
-      matches: [...asMentor.docs, ...asMentee.docs].map((doc) => ({ participants: [], ...doc.data() })),
+      matches: [...asMentor.docs, ...asMentee.docs].map((doc) => ({
+        participants: [],
+        ...doc.data(),
+      })),
     });
   } catch (error) {
     console.error(error);
-    return NextResponse.json({ error: 'Unable to fetch matches' }, { status: 400 });
+    return NextResponse.json(
+      { error: 'Unable to fetch matches' },
+      { status: 400 },
+    );
   }
 }

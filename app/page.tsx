@@ -42,14 +42,16 @@ export default function HomePage() {
       <header className="relative overflow-hidden bg-gradient-to-b from-brand-50 via-white to-sand-50">
         <div className="mx-auto flex w-full max-w-6xl flex-col gap-12 px-6 py-20 text-center">
           <span className="mx-auto inline-flex items-center gap-2 rounded-full border border-brand-200 bg-white px-4 py-1 text-xs font-semibold uppercase tracking-wide text-brand-700">
-            <ShieldCheck className="h-3.5 w-3.5" /> POPIA-conscious mentorship for health professionals
+            <ShieldCheck className="h-3.5 w-3.5" /> POPIA-conscious mentorship
+            for health professionals
           </span>
           <h1 className="text-4xl font-bold tracking-tight text-slate-900 md:text-5xl">
             MentorMatch SA
           </h1>
           <p className="mx-auto max-w-2xl text-base text-slate-600 md:text-lg">
-            A mobile-first mentorship network built for South African community-service health professionals. Discover
-            mentors and mentees, align on goals, and grow together.
+            A mobile-first mentorship network built for South African
+            community-service health professionals. Discover mentors and
+            mentees, align on goals, and grow together.
           </p>
           <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
             <Button asChild size="lg">
@@ -71,8 +73,12 @@ export default function HomePage() {
                   <Users className="h-6 w-6" />
                 </div>
                 <div className="space-y-2">
-                  <h3 className="text-lg font-semibold text-slate-900">{feature.title}</h3>
-                  <p className="text-sm text-slate-600">{feature.description}</p>
+                  <h3 className="text-lg font-semibold text-slate-900">
+                    {feature.title}
+                  </h3>
+                  <p className="text-sm text-slate-600">
+                    {feature.description}
+                  </p>
                 </div>
               </CardContent>
             </Card>
@@ -85,8 +91,12 @@ export default function HomePage() {
           {testimonials.map((testimonial) => (
             <Card key={testimonial.name}>
               <CardContent className="space-y-4 p-6">
-                <p className="text-base text-slate-700">“{testimonial.quote}”</p>
-                <div className="text-sm font-semibold text-slate-900">{testimonial.name}</div>
+                <p className="text-base text-slate-700">
+                  “{testimonial.quote}”
+                </p>
+                <div className="text-sm font-semibold text-slate-900">
+                  {testimonial.name}
+                </div>
                 <div className="text-xs text-slate-500">{testimonial.role}</div>
               </CardContent>
             </Card>
@@ -96,9 +106,12 @@ export default function HomePage() {
 
       <section className="bg-white py-16">
         <div className="mx-auto flex w-full max-w-5xl flex-col items-center gap-6 px-6 text-center">
-          <h2 className="text-2xl font-semibold text-slate-900">Ready to connect?</h2>
+          <h2 className="text-2xl font-semibold text-slate-900">
+            Ready to connect?
+          </h2>
           <p className="max-w-2xl text-sm text-slate-600">
-            MentorMatch SA is free during beta. Access curated mentors, structured templates, and a safe space to learn.
+            MentorMatch SA is free during beta. Access curated mentors,
+            structured templates, and a safe space to learn.
           </p>
           <Button asChild size="lg">
             <Link className="inline-flex items-center gap-2" href="/onboarding">
@@ -111,7 +124,9 @@ export default function HomePage() {
 
       <footer className="bg-slate-900 py-10 text-slate-200">
         <div className="mx-auto flex w-full max-w-6xl flex-col gap-4 px-6 md:flex-row md:items-center md:justify-between">
-          <p className="text-sm">© {new Date().getFullYear()} MentorMatch SA. All rights reserved.</p>
+          <p className="text-sm">
+            © {new Date().getFullYear()} MentorMatch SA. All rights reserved.
+          </p>
           <div className="flex flex-wrap items-center gap-4 text-sm">
             <Link href="/legal/terms" className="hover:text-white">
               Terms of Use
@@ -122,7 +137,10 @@ export default function HomePage() {
             <Link href="/legal/code-of-conduct" className="hover:text-white">
               Code of Conduct
             </Link>
-            <Link href="/legal/community-guidelines" className="hover:text-white">
+            <Link
+              href="/legal/community-guidelines"
+              className="hover:text-white"
+            >
               Community Guidelines
             </Link>
             <Link href="/legal/safety" className="hover:text-white">

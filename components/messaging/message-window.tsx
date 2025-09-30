@@ -40,11 +40,18 @@ export function MessageWindow({ matchId }: { matchId: string }) {
       <CardContent className="flex h-[70vh] flex-col gap-4 p-6">
         <div className="flex-1 space-y-3 overflow-y-auto rounded-2xl bg-slate-100 p-4">
           {messages.map((message: any) => (
-            <div key={message.id} className="rounded-2xl bg-white p-3 text-sm text-slate-700 shadow-sm">
+            <div
+              key={message.id}
+              className="rounded-2xl bg-white p-3 text-sm text-slate-700 shadow-sm"
+            >
               {message.body}
             </div>
           ))}
-          {messages.length === 0 && <p className="text-sm text-slate-500">No messages yet. Start the conversation!</p>}
+          {messages.length === 0 && (
+            <p className="text-sm text-slate-500">
+              No messages yet. Start the conversation!
+            </p>
+          )}
         </div>
         <MessageInput onSend={sendMessage} disabled={sending} />
       </CardContent>

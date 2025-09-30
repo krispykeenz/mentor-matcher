@@ -13,7 +13,12 @@ interface SwipeDeckProps {
   onSave: (profile: DiscoveryProfile) => void;
 }
 
-export function SwipeDeck({ profiles, onLike, onSkip, onSave }: SwipeDeckProps) {
+export function SwipeDeck({
+  profiles,
+  onLike,
+  onSkip,
+  onSave,
+}: SwipeDeckProps) {
   const [index, setIndex] = useState(0);
   const profile = profiles[index];
 
@@ -21,7 +26,8 @@ export function SwipeDeck({ profiles, onLike, onSkip, onSave }: SwipeDeckProps) 
     setIndex(0);
   }, [profiles]);
 
-  const handleNext = () => setIndex((prev) => Math.min(prev + 1, profiles.length));
+  const handleNext = () =>
+    setIndex((prev) => Math.min(prev + 1, profiles.length));
 
   const handlers = useSwipeable({
     onSwipedLeft: () => {
@@ -42,7 +48,10 @@ export function SwipeDeck({ profiles, onLike, onSkip, onSave }: SwipeDeckProps) 
   if (!profile) {
     return (
       <div className="flex h-full min-h-[400px] flex-col items-center justify-center rounded-2xl border border-dashed border-slate-200 bg-white p-10 text-center text-slate-500">
-        <p>No more profiles match your filters yet. Adjust filters or check back soon.</p>
+        <p>
+          No more profiles match your filters yet. Adjust filters or check back
+          soon.
+        </p>
       </div>
     );
   }

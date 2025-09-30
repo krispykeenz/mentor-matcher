@@ -1,12 +1,6 @@
 'use client';
 
-import {
-  createContext,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import type { ReactNode } from 'react';
 import {
   getAuth,
@@ -59,7 +53,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setLoading(false);
       return;
     }
-    
+
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       if (firebaseUser) {
         const tokenResult = await firebaseUser.getIdTokenResult();
@@ -93,7 +87,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       signOutUser: async () => {
         if (!auth) throw new Error('Firebase not initialized');
         await signOut(auth);
-        await fetch('/api/auth/logout', { method: 'POST' }).catch(() => undefined);
+        await fetch('/api/auth/logout', { method: 'POST' }).catch(
+          () => undefined,
+        );
         Cookies.remove('onboarding');
         router.push('/');
       },

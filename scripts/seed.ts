@@ -24,7 +24,14 @@ const SPECIALTIES = [
   'Community Rehab',
 ];
 
-const LANGUAGES = ['English', 'Afrikaans', 'isiXhosa', 'isiZulu', 'Sesotho', 'Setswana'];
+const LANGUAGES = [
+  'English',
+  'Afrikaans',
+  'isiXhosa',
+  'isiZulu',
+  'Sesotho',
+  'Setswana',
+];
 const PROVINCES = ['EC', 'FS', 'GP', 'KZN', 'LP', 'MP', 'NW', 'NC', 'WC'];
 
 async function main() {

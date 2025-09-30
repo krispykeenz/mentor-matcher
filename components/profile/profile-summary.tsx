@@ -3,7 +3,11 @@ import { Badge } from '@/components/ui/badge';
 
 export function ProfileSummary({ profile }: { profile: any }) {
   if (!profile) {
-    return <p className="text-sm text-slate-500">Complete onboarding to publish your profile.</p>;
+    return (
+      <p className="text-sm text-slate-500">
+        Complete onboarding to publish your profile.
+      </p>
+    );
   }
 
   return (
@@ -15,13 +19,17 @@ export function ProfileSummary({ profile }: { profile: any }) {
       <section className="grid gap-4 md:grid-cols-2">
         <Card>
           <CardContent className="space-y-2 p-4">
-            <p className="text-xs uppercase tracking-wide text-slate-500">Role</p>
+            <p className="text-xs uppercase tracking-wide text-slate-500">
+              Role
+            </p>
             <p className="text-sm text-slate-800">{profile.role}</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="space-y-2 p-4">
-            <p className="text-xs uppercase tracking-wide text-slate-500">Location</p>
+            <p className="text-xs uppercase tracking-wide text-slate-500">
+              Location
+            </p>
             <p className="text-sm text-slate-800">
               {profile.city}, {profile.province}
             </p>

@@ -16,10 +16,18 @@ export const baseProfileSchema = z.object({
   fullName: z.string().min(2),
   preferredName: z.string().optional(),
   email: z.string().email(),
-  phone: z.string().regex(phoneRegex, 'Invalid phone number').optional().or(z.literal('')),
+  phone: z
+    .string()
+    .regex(phoneRegex, 'Invalid phone number')
+    .optional()
+    .or(z.literal('')),
   role: z.enum(['Mentor', 'Mentee', 'Both']),
   occupation: z.enum(OCCUPATIONS),
-  councilNumber: z.string().regex(councilRegex, 'Invalid council number').optional().or(z.literal('')),
+  councilNumber: z
+    .string()
+    .regex(councilRegex, 'Invalid council number')
+    .optional()
+    .or(z.literal('')),
   yearsQualified: z.number().int().min(0).max(50),
   stage: z.enum(STAGES),
   province: z.enum(PROVINCES),
@@ -70,7 +78,9 @@ export const baseProfileSchema = z.object({
   menteeGoals: z.array(z.string()).default([]),
   menteeAvailability: z.array(z.string()).default([]),
   meetingModePreference: z.enum(MEETING_MODES).optional(),
-  mentorshipGoals: z.array(z.object({ title: z.string(), description: z.string().optional() })).optional(),
+  mentorshipGoals: z
+    .array(z.object({ title: z.string(), description: z.string().optional() }))
+    .optional(),
   consentedPolicies: z.boolean(),
   ageConfirmed: z.boolean(),
 });

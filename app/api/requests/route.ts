@@ -3,7 +3,10 @@ import { requestSchema } from '@/lib/utils/schemas';
 import { getAdminServices } from '@/lib/firebase/server';
 import { getAuth } from 'firebase-admin/auth';
 import { cookies } from 'next/headers';
-import { sendPushNotification, sendEmailNotification } from '@/lib/server/notifications';
+import {
+  sendPushNotification,
+  sendEmailNotification,
+} from '@/lib/server/notifications';
 
 async function requireUser() {
   const session = cookies().get('__session');
@@ -20,7 +23,10 @@ export async function POST(request: NextRequest) {
     const { db } = getAdminServices();
     const ref = db.collection('requests').doc();
     const senderDoc = await db.collection('users').doc(userId).get();
-    const receiverDoc = await db.collection('users').doc(payload.receiverUserId).get();
+    const receiverDoc = await db
+      .collection('users')
+      .doc(payload.receiverUserId)
+      .get();
     const senderEmail = senderDoc.data()?.email ?? '';
     const receiverEmail = receiverDoc.data()?.email ?? '';
     const senderName = senderDoc.data()?.fullName ?? 'MentorMatch user';
@@ -38,12 +44,22 @@ export async function POST(request: NextRequest) {
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     });
-    await sendPushNotification(payload.receiverUserId, { title: 'New mentorship request', body: payload.message });
-    await sendEmailNotification(receiverEmail, 'New mentorship request', `<p>${senderName} says:</p><p>${payload.message}</p>`);
+    await sendPushNotification(payload.receiverUserId, {
+      title: 'New mentorship request',
+      body: payload.message,
+    });
+    await sendEmailNotification(
+      receiverEmail,
+      'New mentorship request',
+      `<p>${senderName} says:</p><p>${payload.message}</p>`,
+    );
     return NextResponse.json({ id: ref.id });
   } catch (error) {
     console.error(error);
-    return NextResponse.json({ error: 'Unable to send request' }, { status: 400 });
+    return NextResponse.json(
+      { error: 'Unable to send request' },
+      { status: 400 },
+    );
   }
 }
 
@@ -51,14 +67,23 @@ export async function GET() {
   try {
     const userId = await requireUser();
     const { db } = getAdminServices();
-    const sent = await db.collection('requests').where('senderUserId', '==', userId).get();
-    const received = await db.collection('requests').where('receiverUserId', '==', userId).get();
+    const sent = await db
+      .collection('requests')
+      .where('senderUserId', '==', userId)
+      .get();
+    const received = await db
+      .collection('requests')
+      .where('receiverUserId', '==', userId)
+      .get();
     return NextResponse.json({
       sent: sent.docs.map((doc) => doc.data()),
       received: received.docs.map((doc) => doc.data()),
     });
   } catch (error) {
     console.error(error);
-    return NextResponse.json({ error: 'Unable to fetch requests' }, { status: 400 });
+    return NextResponse.json(
+      { error: 'Unable to fetch requests' },
+      { status: 400 },
+    );
   }
 }

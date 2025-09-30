@@ -35,8 +35,12 @@ export default function SignInPage() {
       <Card className="w-full max-w-md">
         <CardContent className="space-y-6 p-8">
           <div className="space-y-2 text-center">
-            <h1 className="text-2xl font-semibold text-slate-900">Sign in to MentorMatch SA</h1>
-            <p className="text-sm text-slate-600">We use secure passwordless links to keep your data safe.</p>
+            <h1 className="text-2xl font-semibold text-slate-900">
+              Sign in to MentorMatch SA
+            </h1>
+            <p className="text-sm text-slate-600">
+              We use secure passwordless links to keep your data safe.
+            </p>
           </div>
           <form onSubmit={onSubmit} className="space-y-4">
             <div className="space-y-2 text-left">
@@ -55,12 +59,20 @@ export default function SignInPage() {
             </Button>
           </form>
           {process.env.NEXT_PUBLIC_ENABLE_GOOGLE_OAUTH === 'true' && (
-            <Button variant="outline" className="w-full" onClick={signInWithGoogle}>
+            <Button
+              variant="outline"
+              className="w-full"
+              onClick={signInWithGoogle}
+            >
               Continue with Google
             </Button>
           )}
           <p className="text-xs text-slate-500">
-            By signing in you agree to our <a className="underline" href="/legal/terms">Terms of Use</a> and{' '}
+            By signing in you agree to our{' '}
+            <a className="underline" href="/legal/terms">
+              Terms of Use
+            </a>{' '}
+            and{' '}
             <a className="underline" href="/legal/privacy">
               Privacy Policy
             </a>

@@ -8,7 +8,13 @@ interface AvatarProps extends React.HTMLAttributes<HTMLDivElement> {
   fallback?: string;
 }
 
-export function Avatar({ src, alt, fallback, className, ...props }: AvatarProps) {
+export function Avatar({
+  src,
+  alt,
+  fallback,
+  className,
+  ...props
+}: AvatarProps) {
   return (
     <div
       className={cn(
@@ -20,7 +26,9 @@ export function Avatar({ src, alt, fallback, className, ...props }: AvatarProps)
       {src ? (
         <Image src={src} alt={alt} fill className="object-cover" sizes="56px" />
       ) : (
-        <span className="text-lg font-semibold">{fallback ?? alt.substring(0, 2).toUpperCase()}</span>
+        <span className="text-lg font-semibold">
+          {fallback ?? alt.substring(0, 2).toUpperCase()}
+        </span>
       )}
     </div>
   );

@@ -2,8 +2,20 @@
 
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from '@/components/ui/sheet';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { MultiSelect } from '@/components/ui/multi-select';
 import { LANGUAGES, OCCUPATIONS, PROVINCES } from '@/lib/const/enums';
 import { Filter } from 'lucide-react';
@@ -40,11 +52,18 @@ export function FiltersDrawer({ onFilterChange }: Props) {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button variant="outline" size="sm" className="inline-flex items-center gap-2">
+        <Button
+          variant="outline"
+          size="sm"
+          className="inline-flex items-center gap-2"
+        >
           <Filter className="h-4 w-4" /> Filters
         </Button>
       </SheetTrigger>
-      <SheetContent side="right" className="w-full max-w-sm space-y-6 overflow-y-auto bg-white p-6">
+      <SheetContent
+        side="right"
+        className="w-full max-w-sm space-y-6 overflow-y-auto bg-white p-6"
+      >
         <SheetHeader>
           <SheetTitle>Refine your matches</SheetTitle>
         </SheetHeader>
@@ -116,7 +135,10 @@ export function FiltersDrawer({ onFilterChange }: Props) {
             <p className="text-sm font-medium text-slate-700">Languages</p>
             <MultiSelect
               values={filters.languages ?? []}
-              options={LANGUAGES.map((language) => ({ label: language, value: language }))}
+              options={LANGUAGES.map((language) => ({
+                label: language,
+                value: language,
+              }))}
               onChange={(values) => {
                 const next = { ...filters, languages: values };
                 setFilters(next);
@@ -128,7 +150,10 @@ export function FiltersDrawer({ onFilterChange }: Props) {
             <p className="text-sm font-medium text-slate-700">Specialties</p>
             <MultiSelect
               values={filters.specialties ?? []}
-              options={specialties.map((specialty) => ({ label: specialty, value: specialty }))}
+              options={specialties.map((specialty) => ({
+                label: specialty,
+                value: specialty,
+              }))}
               onChange={(values) => {
                 const next = { ...filters, specialties: values };
                 setFilters(next);

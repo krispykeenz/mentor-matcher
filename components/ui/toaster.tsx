@@ -9,7 +9,8 @@ export function Toaster() {
       position="top-center"
       toastOptions={{
         classNames: {
-          toast: 'rounded-2xl border border-slate-100 shadow-soft bg-white text-slate-900',
+          toast:
+            'rounded-2xl border border-slate-100 shadow-soft bg-white text-slate-900',
         },
       }}
     />

@@ -11,7 +11,11 @@ export const metadata: Metadata = {
   manifest: '/manifest.webmanifest',
   icons: [
     { rel: 'icon', url: '/icons/icon-192x192.svg', type: 'image/svg+xml' },
-    { rel: 'apple-touch-icon', url: '/icons/icon-192x192.svg', type: 'image/svg+xml' },
+    {
+      rel: 'apple-touch-icon',
+      url: '/icons/icon-192x192.svg',
+      type: 'image/svg+xml',
+    },
   ],
 };
 
