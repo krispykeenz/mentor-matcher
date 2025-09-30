@@ -1,6 +1,7 @@
 'use client';
 
-import { ReactNode, useEffect } from 'react';
+import { useEffect } from 'react';
+import type { ReactNode } from 'react';
 import posthog from 'posthog-js';
 
 const POSTHOG_KEY = process.env.NEXT_PUBLIC_POSTHOG_KEY;
@@ -18,7 +19,7 @@ export function AnalyticsProvider({ children }: { children: ReactNode }) {
     });
 
     return () => {
-      posthog.shutdown();
+      posthog.stopSessionRecording();
     };
   }, []);
 

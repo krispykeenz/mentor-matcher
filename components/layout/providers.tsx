@@ -1,7 +1,8 @@
 'use client';
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { ReactNode, useState } from 'react';
+import { useState } from 'react';
+import type { ReactNode } from 'react';
 import { ThemeProvider } from 'next-themes';
 import { AuthProvider } from '@/lib/auth/auth-context';
 import { AnalyticsProvider } from '@/lib/utils/analytics';

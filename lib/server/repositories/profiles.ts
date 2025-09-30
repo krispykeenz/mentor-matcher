@@ -61,7 +61,7 @@ export async function upsertProfile(userId: string, payload: BaseProfileFormValu
       specialties: parsed.specialties,
       languages: parsed.languages,
       bioShort: parsed.bioShort,
-      photoUrl: parsed['photoUrl'] ?? null,
+      photoUrl: parsed.photoUrl ?? null,
       discoverable: parsed.discoverable,
       updatedAt: new Date().toISOString(),
     },

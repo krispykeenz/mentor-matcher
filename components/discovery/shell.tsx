@@ -5,6 +5,7 @@ import { SwipeDeck } from '@/components/discovery/swipe-deck';
 import type { DiscoveryProfile } from '@/components/discovery/profile-card';
 import { toast } from 'sonner';
 import { FiltersDrawer } from '@/components/discovery/filters-drawer';
+import type { DiscoveryFilters } from '@/components/discovery/filters-drawer';
 
 interface DiscoveryShellProps {
   initialProfiles: DiscoveryProfile[];
@@ -13,7 +14,7 @@ interface DiscoveryShellProps {
 export function DiscoveryShell({ initialProfiles }: DiscoveryShellProps) {
   const [profiles, setProfiles] = useState(initialProfiles);
 
-  const refresh = async (filters?: Record<string, unknown>) => {
+  const refresh = async (filters?: DiscoveryFilters) => {
     const params = new URLSearchParams();
     if (filters) {
       Object.entries(filters).forEach(([key, value]) => {
@@ -30,7 +31,7 @@ export function DiscoveryShell({ initialProfiles }: DiscoveryShellProps) {
     setProfiles(data.profiles ?? []);
   };
 
-  const handleFilters = (filters: Record<string, unknown>) => {
+  const handleFilters = (filters: DiscoveryFilters) => {
     refresh(filters);
   };
 

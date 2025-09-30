@@ -30,6 +30,7 @@ export const baseProfileSchema = z.object({
   interests: z.array(z.string()).default([]),
   bioShort: z.string().max(280),
   bioLong: z.string().max(2000).optional(),
+  photoUrl: z.string().url().optional(),
   education: z.array(
     z.object({
       institution: z.string(),

@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse, type NextRequest } from 'next/server';
 import { reportSchema } from '@/lib/utils/schemas';
 import { getAdminServices } from '@/lib/firebase/server';
 import { getAuth } from 'firebase-admin/auth';

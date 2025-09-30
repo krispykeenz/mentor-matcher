@@ -8,7 +8,7 @@ import { MultiSelect } from '@/components/ui/multi-select';
 import { LANGUAGES, OCCUPATIONS, PROVINCES } from '@/lib/const/enums';
 import { Filter } from 'lucide-react';
 
-interface DiscoveryFilters {
+export interface DiscoveryFilters {
   roleWanted?: string;
   occupation?: string;
   province?: string;
