@@ -125,7 +125,6 @@ export async function MatchesList() {
                     <Button asChild>
                       <Link href={`/chat/${match.id}`}>Open chat</Link>
                     </Button>
-                    {/* @ts-expect-error Server-to-client import for actions */}
                     <MatchActions matchId={match.id} mode="active" />
                   </div>
                 </CardContent>
@@ -157,7 +156,6 @@ export async function MatchesList() {
                     </div>
                   </div>
                   <div className="flex items-center gap-3">
-                    {/* @ts-expect-error Server-to-client import for actions */}
                     <MatchActions matchId={match.id} mode="archived" />
                   </div>
                 </CardContent>
