@@ -63,11 +63,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (firebaseUser) {
         const tokenResult = await firebaseUser.getIdTokenResult();
         const idToken = await firebaseUser.getIdToken();
-        await fetch('/api/auth/post-login', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ idToken }),
-        }).catch(() => undefined);
+        try {
+          const response = await fetch('/api/auth/post-login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ idToken }),
+          });
+          if (!response.ok) {
+            console.error('post-login failed:', response.status, await response.text());
+          } else {
+            console.log('post-login successful');
+          }
+        } catch (error) {
+          console.error('post-login error:', error);
+        }
         const isAdmin = tokenResult.claims?.role === 'admin';
         setUser({
           uid: firebaseUser.uid,
@@ -126,11 +135,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           const current = auth.currentUser;
           if (current) {
             const idToken = await current.getIdToken(true);
-            await fetch('/api/auth/post-login', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ idToken }),
-            }).catch(() => undefined);
+            try {
+              const response = await fetch('/api/auth/post-login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ idToken }),
+              });
+              if (!response.ok) {
+                console.error('magic link post-login failed:', response.status, await response.text());
+              }
+            } catch (error) {
+              console.error('magic link post-login error:', error);
+            }
           }
         } catch {}
         window.localStorage.removeItem('emailForSignIn');
@@ -140,6 +156,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         if (!auth) throw new Error('Firebase not initialized');
         const provider = new GoogleAuthProvider();
         await signInWithPopup(auth, provider);
+        
+        // Wait a moment for the auth state to update and session to be created
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        
+        // Handle post-authentication routing
+        try {
+          const { handlePostAuthRedirect } = await import('@/lib/auth/routing');
+          const destination = await handlePostAuthRedirect();
+          router.push(destination);
+        } catch (error) {
+          console.error('Post-auth routing failed:', error);
+          // Fallback to discovery page
+          router.push('/discover');
+        }
       },
     };
   }, [auth, user, loading, router]);

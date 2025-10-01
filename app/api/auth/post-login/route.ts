@@ -5,9 +5,13 @@ import { cookies } from 'next/headers';
 
 export async function POST(request: NextRequest) {
   try {
+    console.log('POST /api/auth/post-login called');
     const { idToken } = await request.json();
+    console.log('ID token received, length:', idToken?.length);
     const auth = getAuth();
+    console.log('Verifying ID token...');
     const decoded = await auth.verifyIdToken(idToken);
+    console.log('ID token verified for user:', decoded.uid);
     const expiresIn = 60 * 60 * 24 * 5 * 1000; // 5 days
     const sessionCookie = await auth.createSessionCookie(idToken, {
       expiresIn,
@@ -16,11 +20,13 @@ export async function POST(request: NextRequest) {
       name: '__session',
       value: sessionCookie,
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
+      secure: true, // Always secure for production
       sameSite: 'lax',
       path: '/',
       maxAge: expiresIn / 1000,
     });
+    
+    console.log('Session cookie set for user:', decoded.uid, 'expires in:', expiresIn / 1000, 'seconds');
     const { db } = getAdminServices();
     const userRef = db.collection('users').doc(decoded.uid);
     const userDoc = await userRef.get();

@@ -3,9 +3,11 @@
     "rules": "storage.rules"
   },
   "hosting": {
-    "source": "."
-  },
-  "functions": {
-    "runtime": "nodejs20"
+    "public": "out",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ]
   }
 }

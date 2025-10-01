@@ -1,5 +1,4 @@
 import { getAdminServices } from '@/lib/firebase/server';
-import { getAuth } from 'firebase-admin/auth';
 import { cookies } from 'next/headers';
 import Link from 'next/link';
 import { Card, CardContent } from '@/components/ui/card';
@@ -10,9 +9,8 @@ import { MatchActions } from '@/components/dashboard/match-actions';
 async function fetchMatches() {
   const session = cookies().get('__session');
   if (!session) return [] as any[];
-  const auth = getAuth();
+  const { db, auth } = getAdminServices();
   const decoded = await auth.verifySessionCookie(session.value);
-  const { db } = getAdminServices();
   const snapshot = await db
     .collection('matches')
     .where('participants', 'array-contains', decoded.uid)
@@ -65,11 +63,11 @@ export async function MatchesList() {
 
   const userId = (await (async () => {
     try {
-      const { getAuth } = await import('firebase-admin/auth');
       const { cookies } = await import('next/headers');
+      const { getAdminServices } = await import('@/lib/firebase/server');
       const session = cookies().get('__session');
       if (!session) return null;
-      const auth = getAuth();
+      const { auth } = getAdminServices();
       const decoded = await auth.verifySessionCookie(session.value);
       return decoded.uid as string;
     } catch {

@@ -2,11 +2,9 @@ import 'server-only';
 
 import { getAdminServices } from '@/lib/firebase/server';
 import { cookies } from 'next/headers';
-import { getAuth } from 'firebase-admin/auth';
 
 export async function getCurrentUserProfile() {
-  const { db } = getAdminServices();
-  const auth = getAuth();
+  const { db, auth } = getAdminServices();
   const sessionCookie = cookies().get('__session');
   if (!sessionCookie) return null;
   try {

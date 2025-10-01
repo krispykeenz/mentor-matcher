@@ -1,9 +1,11 @@
 import { Suspense } from 'react';
 import { RequestLists } from '@/components/dashboard/request-lists';
+import { requireAuth } from '@/lib/server/auth-guard';
 
 export const dynamic = 'force-dynamic';
 
-export default function RequestsPage() {
+export default async function RequestsPage() {
+  await requireAuth(); // Ensure user is authenticated
   return (
     <div className="min-h-screen bg-sand-50">
       <div className="mx-auto w-full max-w-4xl px-4 py-8">

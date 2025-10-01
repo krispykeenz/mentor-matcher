@@ -75,15 +75,15 @@ export function SwipeDeck({
 
   if (!profile) {
     return (
-      <div className="relative flex h-full min-h-[420px] flex-col items-center justify-center overflow-hidden rounded-2xl border border-slate-200 bg-white p-10 text-center text-slate-500">
+      <div className="relative flex h-full min-h-[300px] flex-col items-center justify-center overflow-hidden rounded-2xl border border-slate-200 bg-white p-6 text-center text-slate-500 md:min-h-[420px] md:p-10">
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(340px_140px_at_50%_0,rgba(29,111,255,0.08),transparent)]" />
         <img
           src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1200&auto=format&fit=crop"
           alt="Friendly home interior"
-          className="mb-4 h-28 w-28 rounded-2xl object-cover shadow-soft"
+          className="mb-3 h-20 w-20 rounded-2xl object-cover shadow-soft md:mb-4 md:h-28 md:w-28"
           loading="lazy"
         />
-        <p className="max-w-md">
+        <p className="max-w-sm text-sm md:max-w-md md:text-base">
           No more profiles match your filters yet. Adjust filters or check back soon.
         </p>
       </div>
@@ -92,18 +92,19 @@ export function SwipeDeck({
 
   return (
     <div className="mx-auto max-w-3xl space-y-6">
-      <div {...handlers} className="relative h-[520px] touch-pan-y select-none md:h-[560px] xl:h-[620px]">
+      <div {...handlers} className="relative h-[400px] touch-pan-y select-none sm:h-[450px] md:h-[500px] xl:h-[580px]">
         <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(640px_200px_at_50%_0,rgba(29,111,255,0.08),transparent)]" />
 
         <div key={profile.id} className="h-full animate-fade-slide" onClick={() => setDetailsOpen(true)}>
           <ProfileCard profile={profile} />
         </div>
       </div>
-      <div className="flex items-center justify-center gap-4">
+      <div className="flex items-center justify-center gap-3 md:gap-4">
         <Button
           aria-label="Skip"
           variant="outline"
           size="icon"
+          className="h-12 w-12 md:h-10 md:w-10"
           onClick={() => {
             onSkip(profile);
             handleNext();
@@ -115,6 +116,7 @@ export function SwipeDeck({
           aria-label="Save"
           variant="ghost"
           size="icon"
+          className="h-12 w-12 md:h-10 md:w-10"
           onClick={() => {
             onSave(profile);
           }}
@@ -124,6 +126,7 @@ export function SwipeDeck({
         <Button
           aria-label="Like"
           size="icon"
+          className="h-12 w-12 md:h-10 md:w-10"
           onClick={() => setComposeOpen(true)}
         >
           <Heart className="h-5 w-5" />

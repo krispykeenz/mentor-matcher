@@ -1,17 +1,8 @@
 import { NextResponse } from 'next/server';
 import { getAdminServices } from '@/lib/firebase/server';
-import { getAuth } from 'firebase-admin/auth';
-import { cookies } from 'next/headers';
+import { requireUser } from '@/lib/server/auth';
 
 export const dynamic = 'force-dynamic';
-
-async function requireUser() {
-  const session = cookies().get('__session');
-  if (!session) throw new Error('Unauthenticated');
-  const auth = getAuth();
-  const decoded = await auth.verifySessionCookie(session.value);
-  return decoded.uid;
-}
 
 export async function GET() {
   try {

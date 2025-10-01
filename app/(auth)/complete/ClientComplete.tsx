@@ -28,22 +28,9 @@ export default function ClientComplete() {
         setStatus('processing');
         await signInWithMagicLink(targetEmail, window.location.href);
 
-        const response = await fetch('/api/profile');
-        if (response.status === 401) {
-          toast.error('Your link has expired. Please request a new one.');
-          setStatus('error');
-          return;
-        }
-        if (!response.ok) {
-          throw new Error('Profile fetch failed');
-        }
-
-        const data = (await response.json()) as {
-          profile: Record<string, unknown> | null;
-          hasProfile: boolean;
-        };
-
-        const destination = data.hasProfile ? '/profile' : '/onboarding';
+        // Use shared post-auth routing logic
+        const { handlePostAuthRedirect } = await import('@/lib/auth/routing');
+        const destination = await handlePostAuthRedirect();
         router.replace(destination);
       } catch (error) {
         console.error('Magic link completion failed', error);

@@ -1,0 +1,12 @@
+{
+  "storage": {
+    "rules": "storage.rules"
+  },
+  "hosting": {
+    "source": "."
+  },
+  "functions": {
+    "source": ".",
+    "runtime": "nodejs20"
+  }
+}

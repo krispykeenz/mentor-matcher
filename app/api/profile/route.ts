@@ -1,23 +1,9 @@
 import { NextResponse, type NextRequest } from 'next/server';
 import { baseProfileSchema } from '@/lib/utils/schemas';
 import type { ZodError } from 'zod';
-import { getAuth } from 'firebase-admin/auth';
-import { cookies } from 'next/headers';
 import { upsertProfile } from '@/lib/server/repositories/profiles';
 import { getAdminServices } from '@/lib/firebase/server';
-
-async function requireUser() {
-  const session = cookies().get('__session');
-  if (!session) throw new Error('Unauthenticated');
-  const auth = getAuth();
-  try {
-    const decoded = await auth.verifySessionCookie(session.value);
-    return decoded.uid;
-  } catch {
-    throw new Error('Unauthenticated');
-  }
-}
-
+import { requireUser } from '@/lib/server/auth';
 
 export async function POST(request: NextRequest) {
   try {

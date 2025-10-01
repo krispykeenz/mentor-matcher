@@ -1,0 +1,21 @@
+{
+  "name": "MentorMatch SA",
+  "short_name": "MentorMatch",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f9f7f4",
+  "theme_color": "#1d6fff",
+  "description": "Mentorship matchmaking for South African community-service health professionals.",
+  "icons": [
+    {
+      "src": "/icons/icon-192x192.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml"
+    },
+    {
+      "src": "/icons/icon-512x512.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml"
+    }
+  ]
+}

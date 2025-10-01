@@ -1,9 +1,11 @@
 import { Suspense } from 'react';
 import { MatchesList } from '@/components/dashboard/matches-list';
+import { requireAuth } from '@/lib/server/auth-guard';
 
 export const dynamic = 'force-dynamic';
 
-export default function MatchesPage() {
+export default async function MatchesPage() {
+  await requireAuth(); // Ensure user is authenticated
   return (
     <div className="min-h-screen bg-sand-50">
       <div className="mx-auto w-full max-w-5xl px-4 py-8">

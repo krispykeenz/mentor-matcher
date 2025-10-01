@@ -54,7 +54,7 @@ export default function HomePage() {
             </p>
             <div className="flex flex-col items-center justify-center gap-4 sm:flex-row md:justify-start">
               <Button asChild size="lg">
-                <Link href="/onboarding">Get started</Link>
+                <Link href="/signin">Get started</Link>
               </Button>
               <Button asChild variant="outline" size="lg">
                 <Link href="#how-it-works">How it works</Link>
@@ -124,7 +124,7 @@ export default function HomePage() {
             structured templates, and a safe space to learn.
           </p>
           <Button asChild size="lg">
-            <Link className="inline-flex items-center gap-2" href="/onboarding">
+            <Link className="inline-flex items-center gap-2" href="/signin">
               Join the beta
               <ArrowRight className="h-4 w-4" />
             </Link>

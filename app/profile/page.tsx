@@ -1,11 +1,13 @@
-﻿import { Suspense } from 'react';
+import { Suspense } from 'react';
 import Link from 'next/link';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { getCurrentUserProfile } from '@/lib/server/profile-actions';
 import { ProfileSummary } from '@/components/profile/profile-summary';
+import { requireAuth } from '@/lib/server/auth-guard';
 
 async function ProfileContent() {
+  await requireAuth(); // Ensure user is authenticated
   const profile = await getCurrentUserProfile();
   const hasProfile = Boolean(profile);
   return (

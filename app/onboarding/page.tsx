@@ -3,9 +3,22 @@ import { Card, CardContent } from '@/components/ui/card';
 import { OnboardingWizard } from '@/components/forms/onboarding-wizard';
 import { getCurrentUserProfile } from '@/lib/server/profile-actions';
 import { Skeleton } from '@/components/ui/skeleton';
+import { redirect } from 'next/navigation';
+import { cookies } from 'next/headers';
 
 async function OnboardingContent() {
+  // Check if user is authenticated
+  const sessionCookie = cookies().get('__session');
+  if (!sessionCookie) {
+    redirect('/signin');
+  }
+  
   const profile = await getCurrentUserProfile();
+  
+  // Double-check profile fetch worked (in case session is invalid)
+  if (profile === null) {
+    redirect('/signin');
+  }
 
   return (
     <div className="mx-auto w-full max-w-4xl px-4 py-10">

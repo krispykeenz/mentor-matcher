@@ -81,17 +81,19 @@ export function DiscoveryShell({ initialProfiles }: DiscoveryShellProps) {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-semibold text-slate-900">
+    <div className="space-y-4 md:space-y-6">
+      <div className="flex items-start justify-between gap-4">
+        <div className="min-w-0 flex-1">
+          <h1 className="text-xl font-semibold text-slate-900 md:text-2xl">
             Discover matches
           </h1>
-          <p className="text-sm text-slate-600">
-            Swipe right to request mentorship, left to skip, star to bookmark.
+          <p className="text-xs text-slate-600 md:text-sm">
+            Swipe right to request, left to skip, star to save.
           </p>
         </div>
-        <FiltersDrawer onFilterChange={handleFilters} />
+        <div className="flex-shrink-0">
+          <FiltersDrawer onFilterChange={handleFilters} />
+        </div>
       </div>
 
       <div className="mx-auto grid w-full max-w-6xl grid-cols-1 gap-6 lg:grid-cols-[1.4fr_1fr]">

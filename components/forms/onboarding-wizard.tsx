@@ -163,7 +163,9 @@ export function OnboardingWizard({
         body: JSON.stringify(values),
       });
       if (!response.ok) {
-        throw new Error('Failed to save profile');
+        const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
+        console.error('Profile save failed:', response.status, errorData);
+        throw new Error(errorData.error || `Server error: ${response.status}`);
       }
       return response.json();
     },
@@ -176,8 +178,9 @@ export function OnboardingWizard({
       router.push(mode === 'edit' ? '/profile' : '/discover');
     },
     onError: (error: unknown) => {
-      console.error(error);
-      toast.error('Could not save profile');
+      console.error('Profile mutation error:', error);
+      const message = error instanceof Error ? error.message : 'Could not save profile';
+      toast.error(message);
     },
   });
 

@@ -1,7 +1,9 @@
 import { Suspense } from 'react';
 import { AdminReports } from '@/components/dashboard/admin-reports';
+import { requireAuth } from '@/lib/server/auth-guard';
 
-export default function AdminPage() {
+export default async function AdminPage() {
+  await requireAuth(); // Ensure user is authenticated
   return (
     <div className="min-h-screen bg-sand-50">
       <div className="mx-auto w-full max-w-5xl px-4 py-8">
