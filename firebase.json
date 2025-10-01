@@ -4,5 +4,8 @@
   },
   "hosting": {
     "source": "."
+  },
+  "functions": {
+    "runtime": "nodejs20"
   }
 }
