@@ -1,6 +1,8 @@
 import { Suspense } from 'react';
 import { RequestLists } from '@/components/dashboard/request-lists';
 
+export const dynamic = 'force-dynamic';
+
 export default function RequestsPage() {
   return (
     <div className="min-h-screen bg-sand-50">

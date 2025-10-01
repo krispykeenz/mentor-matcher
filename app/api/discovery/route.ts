@@ -3,6 +3,8 @@ import { fetchDiscoveryProfiles } from '@/lib/server/repositories/profiles';
 import { getAuth } from 'firebase-admin/auth';
 import { cookies } from 'next/headers';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);

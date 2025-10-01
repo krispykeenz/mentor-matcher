@@ -2,6 +2,8 @@ import { Suspense } from 'react';
 import { fetchDiscoveryProfiles } from '@/lib/server/repositories/profiles';
 import { DiscoveryShell } from '@/components/discovery/shell';
 
+export const dynamic = 'force-dynamic';
+
 async function DiscoveryContent() {
   const profiles = await fetchDiscoveryProfiles({});
   return <DiscoveryShell initialProfiles={profiles} />;

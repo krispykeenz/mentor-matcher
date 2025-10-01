@@ -1,6 +1,8 @@
 import { Suspense } from 'react';
 import { MatchesList } from '@/components/dashboard/matches-list';
 
+export const dynamic = 'force-dynamic';
+
 export default function MatchesPage() {
   return (
     <div className="min-h-screen bg-sand-50">

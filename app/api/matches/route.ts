@@ -3,6 +3,8 @@ import { getAdminServices } from '@/lib/firebase/server';
 import { getAuth } from 'firebase-admin/auth';
 import { cookies } from 'next/headers';
 
+export const dynamic = 'force-dynamic';
+
 async function requireUser() {
   const session = cookies().get('__session');
   if (!session) throw new Error('Unauthenticated');

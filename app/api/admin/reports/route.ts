@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 import { getAdminServices } from '@/lib/firebase/server';
 import { requireAdmin } from '@/lib/server/require-admin';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET() {
   try {
     await requireAdmin();
