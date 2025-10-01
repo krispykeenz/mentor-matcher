@@ -7,6 +7,7 @@ import {
   OCCUPATIONS,
   PROVINCES,
   STAGES,
+  GENDERS,
 } from '@/lib/const/enums';
 
 const phoneRegex = /^\+?[1-9]\d{7,14}$/;
@@ -23,6 +24,7 @@ export const baseProfileSchema = z.object({
     .or(z.literal('')),
   role: z.enum(['Mentor', 'Mentee', 'Both']),
   occupation: z.enum(OCCUPATIONS),
+  gender: z.enum(GENDERS).optional(),
   councilNumber: z
     .string()
     .regex(councilRegex, 'Invalid council number')
@@ -109,6 +111,7 @@ export const discoveryFiltersSchema = z.object({
   roleWanted: z.enum(['Mentor', 'Mentee', 'Both']).optional(),
   occupation: z.string().optional(),
   province: z.string().optional(),
+  gender: z.enum(GENDERS).optional(),
   languages: z.array(z.string()).optional(),
   specialties: z.array(z.string()).optional(),
   virtualOnly: z.boolean().optional(),

@@ -1,5 +1,6 @@
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Avatar } from '@/components/ui/avatar';
 
 export function ProfileSummary({ profile }: { profile: any }) {
   if (!profile) {
@@ -12,9 +13,17 @@ export function ProfileSummary({ profile }: { profile: any }) {
 
   return (
     <div className="space-y-6">
-      <section>
-        <h2 className="text-lg font-semibold text-slate-900">Overview</h2>
-        <p className="text-sm text-slate-600">{profile.bioShort}</p>
+      <section className="flex items-center gap-4">
+        <Avatar src={profile.photoUrl} alt={profile.fullName ?? 'Profile'} className="h-16 w-16" />
+        <div className="flex-1">
+          <h2 className="text-lg font-semibold text-slate-900">{profile.fullName}</h2>
+          <p className="text-sm text-slate-600">{profile.bioShort}</p>
+        </div>
+        <div>
+          <a href="/profile/edit" className="text-sm font-medium text-brand-700 underline">
+            Change photo
+          </a>
+        </div>
       </section>
       <section className="grid gap-4 md:grid-cols-2">
         <Card>

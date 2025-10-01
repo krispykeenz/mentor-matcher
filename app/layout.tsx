@@ -24,10 +24,30 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     <html lang="en" suppressHydrationWarning>
       <body className="min-h-screen bg-sand-50 font-sans text-slate-900">
         <Providers>
-          <main>{children}</main>
+          <main className="pb-20 md:pb-0 md:pt-16">{children}</main>
+          {/* Mobile primary navigation */}
+          {/* @ts-expect-error Server-to-client import is allowed for client components */}
+          <MobileNavSlot />
+          {/* Desktop top navigation */}
+          {/* @ts-expect-error Server-to-client import is allowed for client components */}
+          <TopNavSlot />
           <Toaster />
         </Providers>
       </body>
     </html>
   );
+}
+
+// Separate component to avoid Next.js RSC hoisting surprises
+function MobileNavSlot() {
+  // Dynamically import to ensure client-only behavior without SSR issues
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  const { BottomNav } = require('@/components/layout/bottom-nav');
+  return <BottomNav />;
+}
+
+function TopNavSlot() {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  const { TopNav } = require('@/components/layout/top-nav');
+  return <TopNav />;
 }

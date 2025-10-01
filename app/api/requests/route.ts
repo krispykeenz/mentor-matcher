@@ -67,17 +67,49 @@ export async function GET() {
   try {
     const userId = await requireUser();
     const { db } = getAdminServices();
-    const sent = await db
+    const sentSnap = await db
       .collection('requests')
       .where('senderUserId', '==', userId)
       .get();
-    const received = await db
+    const receivedSnap = await db
       .collection('requests')
       .where('receiverUserId', '==', userId)
       .get();
+
+    const sent = sentSnap.docs.map((doc) => doc.data() as any);
+    const received = receivedSnap.docs.map((doc) => doc.data() as any);
+
+    const ids = new Set<string>();
+    [...sent, ...received].forEach((r) => {
+      if (r.senderUserId) ids.add(r.senderUserId);
+      if (r.receiverUserId) ids.add(r.receiverUserId);
+    });
+    const profileDocs = await Promise.all(
+      Array.from(ids).map((id) => db.collection('profiles_public').doc(id).get()),
+    );
+    const profileMap = new Map(
+      profileDocs
+        .filter((d) => d.exists)
+        .map((d) => [d.id, d.data() as any]),
+    );
+
+    const enrich = (r: any) => {
+      const createdAt = r.createdAt ? Date.parse(r.createdAt) : 0;
+      const isRecent = createdAt > 0 ? Date.now() - createdAt < 1000 * 60 * 60 * 48 : false;
+      return {
+        ...r,
+        senderPhoto: profileMap.get(r.senderUserId)?.photoUrl || null,
+        receiverPhoto: profileMap.get(r.receiverUserId)?.photoUrl || null,
+        senderName: r.senderName || profileMap.get(r.senderUserId)?.fullName || 'User',
+        receiverName:
+          r.receiverName || profileMap.get(r.receiverUserId)?.fullName || 'User',
+        isNew: r.status === 'pending' && r.receiverUserId === userId && isRecent,
+      };
+    };
+
     return NextResponse.json({
-      sent: sent.docs.map((doc) => doc.data()),
-      received: received.docs.map((doc) => doc.data()),
+      sent: sent.map(enrich),
+      received: received.map(enrich),
     });
   } catch (error) {
     console.error(error);

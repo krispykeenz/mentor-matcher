@@ -67,16 +67,39 @@ export async function GET(
     if (!matchDoc.exists) {
       return NextResponse.json({ error: 'Match not found' }, { status: 404 });
     }
-    const match = matchDoc.data();
+    const match = matchDoc.data() as any;
     if (!match || ![match.mentorId, match.menteeId].includes(userId)) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
+
+    const peerId = match.mentorId === userId ? match.menteeId : match.mentorId;
+    const peerProfile = await db.collection('profiles_public').doc(peerId).get();
+    const peer = peerProfile.exists
+      ? {
+          id: peerId,
+          name: (peerProfile.data() as any)?.fullName ?? 'User',
+          photoUrl: (peerProfile.data() as any)?.photoUrl ?? null,
+        }
+      : { id: peerId, name: 'User', photoUrl: null };
+
+    // Include current user info for chat UI
+    const meProfileDoc = await db.collection('profiles_public').doc(userId).get();
+    const me = meProfileDoc.exists
+      ? {
+          id: userId,
+          name: (meProfileDoc.data() as any)?.fullName ?? 'You',
+          photoUrl: (meProfileDoc.data() as any)?.photoUrl ?? null,
+        }
+      : { id: userId, name: 'You', photoUrl: null };
+
     const messagesSnapshot = await matchRef
       .collection('messages')
       .orderBy('createdAt', 'asc')
       .limit(200)
       .get();
     return NextResponse.json({
+      peer,
+      me,
       messages: messagesSnapshot.docs.map((doc) => doc.data()),
     });
   } catch (error) {

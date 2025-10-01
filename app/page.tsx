@@ -40,26 +40,36 @@ export default function HomePage() {
   return (
     <div className="flex min-h-screen flex-col">
       <header className="relative overflow-hidden bg-gradient-to-b from-brand-50 via-white to-sand-50">
-        <div className="mx-auto flex w-full max-w-6xl flex-col gap-12 px-6 py-20 text-center">
-          <span className="mx-auto inline-flex items-center gap-2 rounded-full border border-brand-200 bg-white px-4 py-1 text-xs font-semibold uppercase tracking-wide text-brand-700">
-            <ShieldCheck className="h-3.5 w-3.5" /> POPIA-conscious mentorship
-            for health professionals
-          </span>
-          <h1 className="text-4xl font-bold tracking-tight text-slate-900 md:text-5xl">
-            MentorMatch SA
-          </h1>
-          <p className="mx-auto max-w-2xl text-base text-slate-600 md:text-lg">
-            A mobile-first mentorship network built for South African
-            community-service health professionals. Discover mentors and
-            mentees, align on goals, and grow together.
-          </p>
-          <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
-            <Button asChild size="lg">
-              <Link href="/onboarding">Get started</Link>
-            </Button>
-            <Button asChild variant="outline" size="lg">
-              <Link href="#how-it-works">How it works</Link>
-            </Button>
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(600px_240px_at_10%_-20%,rgba(29,111,255,0.12),transparent)]" />
+        <div className="relative mx-auto grid w-full max-w-6xl grid-cols-1 items-center gap-12 px-6 py-20 text-center md:grid-cols-2 md:text-left">
+          <div className="space-y-6 animate-float-in">
+            <span className="mx-auto inline-flex items-center gap-2 rounded-full border border-brand-200 bg-white/80 px-4 py-1 text-xs font-semibold uppercase tracking-wide text-brand-700 md:mx-0">
+              <ShieldCheck className="h-3.5 w-3.5" /> POPIA-conscious mentorship for health professionals
+            </span>
+            <h1 className="text-4xl font-bold tracking-tight text-slate-900 md:text-5xl">
+              MentorMatch SA
+            </h1>
+            <p className="mx-auto max-w-2xl text-base text-slate-600 md:mx-0 md:text-lg">
+              A mentorship network built for South African community-service health professionals. Discover mentors and mentees, align on goals, and grow together.
+            </p>
+            <div className="flex flex-col items-center justify-center gap-4 sm:flex-row md:justify-start">
+              <Button asChild size="lg">
+                <Link href="/onboarding">Get started</Link>
+              </Button>
+              <Button asChild variant="outline" size="lg">
+                <Link href="#how-it-works">How it works</Link>
+              </Button>
+            </div>
+          </div>
+          <div className="relative hidden h-[360px] w-full md:block animate-float-in" aria-hidden>
+            {/* Calming homely image */}
+            <img
+              src="https://images.unsplash.com/photo-1505691723518-36a5ac3b2d52?q=80&w=1200&auto=format&fit=crop"
+              alt="Warm, homely interior"
+              className="absolute inset-0 h-full w-full rounded-3xl object-cover shadow-soft"
+              loading="lazy"
+            />
+            <div className="absolute inset-0 rounded-3xl bg-gradient-to-tr from-white/30 to-transparent" />
           </div>
         </div>
       </header>
@@ -67,7 +77,7 @@ export default function HomePage() {
       <section id="how-it-works" className="bg-white py-16">
         <div className="mx-auto grid w-full max-w-6xl gap-8 px-6 md:grid-cols-3">
           {features.map((feature) => (
-            <Card key={feature.title}>
+            <Card key={feature.title} className="animate-float-in">
               <CardContent className="space-y-4 p-6">
                 <div className="flex h-12 w-12 items-center justify-center rounded-full bg-brand-100 text-brand-600">
                   <Users className="h-6 w-6" />
@@ -89,7 +99,7 @@ export default function HomePage() {
       <section className="bg-sand-100 py-16">
         <div className="mx-auto grid w-full max-w-5xl gap-8 px-6 md:grid-cols-2">
           {testimonials.map((testimonial) => (
-            <Card key={testimonial.name}>
+            <Card key={testimonial.name} className="animate-float-in">
               <CardContent className="space-y-4 p-6">
                 <p className="text-base text-slate-700">
                   “{testimonial.quote}”

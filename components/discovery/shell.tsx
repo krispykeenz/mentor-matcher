@@ -1,11 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { SwipeDeck } from '@/components/discovery/swipe-deck';
 import type { DiscoveryProfile } from '@/components/discovery/profile-card';
 import { toast } from 'sonner';
 import { FiltersDrawer } from '@/components/discovery/filters-drawer';
 import type { DiscoveryFilters } from '@/components/discovery/filters-drawer';
+import { QuickFiltersPanel, type QuickFilters } from '@/components/discovery/quick-filters-panel';
+import { HighlightsPanel } from '@/components/discovery/highlights-panel';
 
 interface DiscoveryShellProps {
   initialProfiles: DiscoveryProfile[];
@@ -13,6 +15,9 @@ interface DiscoveryShellProps {
 
 export function DiscoveryShell({ initialProfiles }: DiscoveryShellProps) {
   const [profiles, setProfiles] = useState(initialProfiles);
+  const [active, setActive] = useState<DiscoveryProfile | null>(null);
+  const [quickFilters, setQuickFilters] = useState<QuickFilters>({});
+  const [viewer, setViewer] = useState<any | null>(null);
 
   const refresh = async (filters?: DiscoveryFilters) => {
     const params = new URLSearchParams();
@@ -33,6 +38,26 @@ export function DiscoveryShell({ initialProfiles }: DiscoveryShellProps) {
     setProfiles(data.profiles ?? []);
   };
 
+  // Fetch viewer profile on mount
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await fetch('/api/profile');
+        if (!cancelled && res.ok) {
+          const data = await res.json();
+          setViewer((data?.profile as any) ?? null);
+        }
+      } catch {}
+    })();
+    return () => { cancelled = true; };
+  }, []);
+
+  const applyQuickFilters = (next: QuickFilters) => {
+    setQuickFilters(next);
+    refresh(next as DiscoveryFilters);
+  };
+
   const handleFilters = (filters: DiscoveryFilters) => {
     refresh(filters);
   };
@@ -50,21 +75,9 @@ export function DiscoveryShell({ initialProfiles }: DiscoveryShellProps) {
     toast.success('Profile saved');
   };
 
-  const handleLike = async (profile: DiscoveryProfile) => {
-    const response = await fetch('/api/requests', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        receiverUserId: profile.id,
-        message: 'Hi! I would love to connect.',
-        goals: ['General support'],
-      }),
-    });
-    if (response.ok) {
-      toast.success('Mentorship request sent');
-    } else {
-      toast.error('Could not send request');
-    }
+  const handleLike = async (_profile: DiscoveryProfile) => {
+    // Request is sent from SwipeDeck after composing a message.
+    toast.success('Mentorship request sent');
   };
 
   return (
@@ -80,12 +93,20 @@ export function DiscoveryShell({ initialProfiles }: DiscoveryShellProps) {
         </div>
         <FiltersDrawer onFilterChange={handleFilters} />
       </div>
-      <SwipeDeck
-        profiles={profiles}
-        onLike={handleLike}
-        onSkip={handleSkip}
-        onSave={handleSave}
-      />
+
+      <div className="mx-auto grid w-full max-w-6xl grid-cols-1 gap-6 lg:grid-cols-[1.4fr_1fr]">
+        <SwipeDeck
+          profiles={profiles}
+          onLike={handleLike}
+          onSkip={handleSkip}
+          onSave={handleSave}
+          onActiveChange={(p) => setActive(p)}
+        />
+        <div className="sticky top-20 hidden h-fit space-y-4 self-start lg:block">
+          <QuickFiltersPanel value={quickFilters} onChange={applyQuickFilters} />
+          <HighlightsPanel active={active} viewer={viewer} />
+        </div>
+      </div>
     </div>
   );
 }

@@ -24,6 +24,7 @@ export interface DiscoveryFilters {
   roleWanted?: string;
   occupation?: string;
   province?: string;
+  gender?: 'Male' | 'Female';
   languages?: string[];
   specialties?: string[];
 }
@@ -83,6 +84,29 @@ export function FiltersDrawer({ onFilterChange }: Props) {
                   }}
                 >
                   {role}
+                </Button>
+              ))}
+            </div>
+          </div>
+          <div className="space-y-2">
+            <p className="text-sm font-medium text-slate-700">Gender</p>
+            <div className="grid grid-cols-3 gap-2">
+              {['Any', 'Male', 'Female'].map((g) => (
+                <Button
+                  key={g}
+                  type="button"
+                  variant={
+                    (g === 'Any' && !filters.gender) || filters.gender === g
+                      ? 'default'
+                      : 'outline'
+                  }
+                  onClick={() => {
+                    const next = { ...filters, gender: g === 'Any' ? undefined : (g as 'Male' | 'Female') };
+                    setFilters(next);
+                    onFilterChange(next);
+                  }}
+                >
+                  {g}
                 </Button>
               ))}
             </div>

@@ -1,14 +1,28 @@
-import { Suspense } from 'react';
+﻿import { Suspense } from 'react';
+import Link from 'next/link';
 import { Card, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 import { getCurrentUserProfile } from '@/lib/server/profile-actions';
 import { ProfileSummary } from '@/components/profile/profile-summary';
 
 async function ProfileContent() {
   const profile = await getCurrentUserProfile();
+  const hasProfile = Boolean(profile);
   return (
     <Card>
       <CardContent className="space-y-6 p-8">
         <ProfileSummary profile={profile} />
+        <div className="flex justify-end">
+          {hasProfile ? (
+            <Button asChild variant="outline">
+              <Link href="/profile/edit">Edit profile</Link>
+            </Button>
+          ) : (
+            <Button asChild>
+              <Link href="/onboarding">Start onboarding</Link>
+            </Button>
+          )}
+        </div>
       </CardContent>
     </Card>
   );
@@ -30,3 +44,4 @@ export default function ProfilePage() {
     </div>
   );
 }
+

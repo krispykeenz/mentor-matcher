@@ -9,7 +9,16 @@ async function OnboardingContent() {
 
   return (
     <div className="mx-auto w-full max-w-4xl px-4 py-10">
-      <Card>
+      <div className="relative mb-6 hidden h-44 overflow-hidden rounded-3xl md:block">
+        <img
+          src="https://images.unsplash.com/photo-1455587734955-081b22074882?q=80&w=1200&auto=format&fit=crop"
+          alt="Calming workspace"
+          className="absolute inset-0 h-full w-full object-cover"
+          loading="lazy"
+        />
+        <div className="absolute inset-0 bg-gradient-to-tr from-white/70 via-white/30 to-transparent" />
+      </div>
+      <Card className="animate-float-in">
         <CardContent className="space-y-8 p-8">
           <OnboardingWizard profile={profile ?? undefined} />
         </CardContent>

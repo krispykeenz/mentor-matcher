@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import type { ReactNode } from 'react';
@@ -24,11 +24,16 @@ export type AuthUser = {
   isAdmin?: boolean;
 };
 
+type AuthFlowMode = 'sign-in' | 'sign-up';
+
 interface AuthContextValue {
   user: AuthUser | null;
   loading: boolean;
   signOutUser: () => Promise<void>;
-  sendMagicLink: (email: string) => Promise<void>;
+  sendMagicLink: (
+    email: string,
+    options?: { mode?: AuthFlowMode },
+  ) => Promise<void>;
   signInWithMagicLink: (email: string, link?: string) => Promise<void>;
   signInWithGoogle: () => Promise<void>;
 }
@@ -93,14 +98,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         Cookies.remove('onboarding');
         router.push('/');
       },
-      sendMagicLink: async (email: string) => {
+      sendMagicLink: async (
+        email: string,
+        options?: { mode?: AuthFlowMode },
+      ) => {
         if (!auth) throw new Error('Firebase not initialized');
+        const normalizedEmail = email.trim();
+        const callbackUrl = new URL('/complete', window.location.origin);
+        const mode = options?.mode ?? 'sign-in';
+        callbackUrl.searchParams.set('mode', mode);
         const settings = {
-          url: `${window.location.origin}/auth/complete`,
+          url: callbackUrl.toString(),
           handleCodeInApp: true,
         };
-        await sendSignInLinkToEmail(auth, email, settings);
-        window.localStorage.setItem('emailForSignIn', email);
+        await sendSignInLinkToEmail(auth, normalizedEmail, settings);
+        window.localStorage.setItem('emailForSignIn', normalizedEmail);
+        window.localStorage.setItem('authFlow', mode);
       },
       signInWithMagicLink: async (email: string, link?: string) => {
         if (!auth) throw new Error('Firebase not initialized');
@@ -109,7 +122,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         const href = link || window.location.href;
         if (!isSignInWithEmailLink(auth, href)) throw new Error('Invalid link');
         await signInWithEmailLink(auth, signInEmail, href);
+        try {
+          const current = auth.currentUser;
+          if (current) {
+            const idToken = await current.getIdToken(true);
+            await fetch('/api/auth/post-login', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ idToken }),
+            }).catch(() => undefined);
+          }
+        } catch {}
         window.localStorage.removeItem('emailForSignIn');
+        window.localStorage.removeItem('authFlow');
       },
       signInWithGoogle: async () => {
         if (!auth) throw new Error('Firebase not initialized');
@@ -127,3 +152,4 @@ export function useAuth() {
   if (!ctx) throw new Error('useAuth must be used within AuthProvider');
   return ctx;
 }
+

@@ -29,6 +29,9 @@ export async function fetchDiscoveryProfiles(
   if (filters.province) {
     ref = ref.where('province', '==', filters.province);
   }
+  if ((filters as any).gender) {
+    ref = ref.where('gender', '==', (filters as any).gender);
+  }
 
   const snapshot = await ref.get();
   const profiles = snapshot.docs.map(
@@ -63,8 +66,16 @@ export async function upsertProfile(
   userId: string,
   payload: BaseProfileFormValues,
 ) {
-  const { db } = getAdminServices();
+  const { db, storage } = getAdminServices();
   const parsed = baseProfileSchema.parse(payload);
+
+  // Fetch existing profile to detect old photo for cleanup
+  const existingSnap = await db.collection('users').doc(userId).get();
+  const existing = (existingSnap.exists ? (existingSnap.data() as any) : null) || {};
+  const oldPhotoUrl: string | null = existing.photoUrl ?? null;
+  const newPhotoUrl: string | null = parsed.photoUrl ?? null;
+
+  // Update private user profile
   await db
     .collection('users')
     .doc(userId)
@@ -75,6 +86,8 @@ export async function upsertProfile(
       },
       { merge: true },
     );
+
+  // Update public profile
   await db
     .collection('profiles_public')
     .doc(userId)
@@ -86,6 +99,7 @@ export async function upsertProfile(
         occupation: parsed.occupation,
         province: parsed.province,
         city: parsed.city,
+        gender: parsed.gender ?? null,
         specialties: parsed.specialties,
         languages: parsed.languages,
         bioShort: parsed.bioShort,
@@ -95,4 +109,21 @@ export async function upsertProfile(
       },
       { merge: true },
     );
+
+  // Best-effort cleanup: delete old avatar if replaced
+  if (oldPhotoUrl && newPhotoUrl && oldPhotoUrl !== newPhotoUrl) {
+    try {
+      const match = /\/o\/([^?]+)/.exec(oldPhotoUrl);
+      if (match && match[1]) {
+        const objectPath = decodeURIComponent(match[1]);
+        // Only delete user-owned avatar files for safety
+        if (objectPath.startsWith(`avatars/${userId}/`)) {
+          await storage.bucket().file(objectPath).delete({ ignoreNotFound: true });
+        }
+      }
+    } catch (err) {
+      // Swallow errors to avoid failing the profile update due to cleanup
+      console.warn('Avatar cleanup failed', err);
+    }
+  }
 }

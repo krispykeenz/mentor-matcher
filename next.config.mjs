@@ -9,6 +9,19 @@ const config = {
         protocol: 'https',
         hostname: '**',
       },
+      // Allow Firebase Storage emulator in development
+      {
+        protocol: 'http',
+        hostname: '127.0.0.1',
+        port: '9199',
+        pathname: '/v0/b/**',
+      },
+      {
+        protocol: 'http',
+        hostname: 'localhost',
+        port: '9199',
+        pathname: '/v0/b/**',
+      },
     ],
   },
   transpilePackages: ['lucide-react'],

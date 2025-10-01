@@ -37,6 +37,7 @@ export async function PATCH(
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
     await ref.update({ status, updatedAt: new Date().toISOString() });
+    let matchId: string | undefined = undefined;
     if (status === 'accepted') {
       const matchesRef = db.collection('matches').doc();
       await matchesRef.set({
@@ -49,6 +50,7 @@ export async function PATCH(
         startedAt: new Date().toISOString(),
         status: 'active',
       });
+      matchId = matchesRef.id;
       await sendPushNotification(data.senderUserId, {
         title: 'Mentorship match!',
         body: 'Your request was accepted.',
@@ -59,7 +61,7 @@ export async function PATCH(
         'Your mentorship request has been accepted.',
       );
     }
-    return NextResponse.json({ status: 'ok' });
+    return NextResponse.json({ status: 'ok', matchId });
   } catch (error) {
     console.error(error);
     return NextResponse.json(

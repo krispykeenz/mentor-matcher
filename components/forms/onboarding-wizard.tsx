@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -20,6 +20,7 @@ import {
 } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
 import { ProgressBar } from '@/components/ui/progress';
+import { AvatarUpload } from '@/components/profile/avatar-upload';
 import {
   OCCUPATIONS,
   PROVINCES,
@@ -55,6 +56,7 @@ const initialValues: BaseProfileFormValues = {
   phone: '',
   role: 'Mentee',
   occupation: 'Physiotherapist',
+  gender: undefined,
   councilNumber: '',
   yearsQualified: 0,
   stage: 'Community Service',
@@ -102,7 +104,7 @@ const steps = [
 ];
 
 const stepFieldMap: Record<number, string[]> = {
-  0: ['fullName', 'email', 'phone', 'role', 'occupation'],
+  0: ['fullName', 'email', 'phone', 'role', 'occupation', 'gender'],
   1: [
     'province',
     'city',
@@ -110,6 +112,7 @@ const stepFieldMap: Record<number, string[]> = {
     'languages',
     'specialties',
     'bioShort',
+    'photoUrl',
   ],
   2: ['mentorshipStyle', 'meetingModes', 'mentorPreferences.capacity'],
   3: ['consentedPolicies', 'ageConfirmed'],
@@ -117,8 +120,10 @@ const stepFieldMap: Record<number, string[]> = {
 
 export function OnboardingWizard({
   profile,
+  mode = 'onboarding',
 }: {
   profile?: Partial<BaseProfileFormValues>;
+  mode?: 'onboarding' | 'edit';
 }) {
   const [step, setStep] = useState(0);
   const router = useRouter();
@@ -163,8 +168,12 @@ export function OnboardingWizard({
       return response.json();
     },
     onSuccess: () => {
-      toast.success('Profile saved. Welcome to MentorMatch SA!');
-      router.push('/discover');
+      const successMessage =
+        mode === 'edit'
+          ? 'Profile updated successfully.'
+          : 'Profile saved. Welcome to MentorMatch SA!';
+      toast.success(successMessage);
+      router.push(mode === 'edit' ? '/profile' : '/discover');
     },
     onError: (error: unknown) => {
       console.error(error);
@@ -214,7 +223,7 @@ export function OnboardingWizard({
       </div>
 
       {step === 0 && (
-        <div className="grid gap-6 md:grid-cols-2">
+        <div className="grid gap-6 md:grid-cols-2 animate-fade-slide">
           <div className="space-y-2">
             <Label htmlFor="fullName">Full name</Label>
             <Input id="fullName" {...form.register('fullName')} />
@@ -255,6 +264,21 @@ export function OnboardingWizard({
             </div>
           </div>
           <div className="space-y-2">
+            <Label>Gender</Label>
+            <div className="flex gap-3">
+              {['Male', 'Female'].map((g) => (
+                <label
+                  key={g}
+                  className="flex items-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-2"
+                >
+                  <input type="radio" value={g} {...form.register('gender')} />
+                  <span className="text-sm">{g}</span>
+                </label>
+              ))}
+            </div>
+            <p className="text-xs text-red-500">{(form.formState.errors as any).gender?.message}</p>
+          </div>
+          <div className="space-y-2">
             <Label htmlFor="occupation">Occupation</Label>
             <Select
               value={form.watch('occupation')}
@@ -278,7 +302,14 @@ export function OnboardingWizard({
       )}
 
       {step === 1 && (
-        <div className="grid gap-6 md:grid-cols-2">
+        <div className="grid gap-6 md:grid-cols-2 animate-fade-slide">
+          <div className="space-y-2 md:col-span-2">
+            <AvatarUpload
+              value={form.watch('photoUrl') || null}
+              onChange={(url) => form.setValue('photoUrl', url || undefined, { shouldDirty: true, shouldValidate: false })}
+              label="Profile photo"
+            />
+          </div>
           <div className="space-y-2">
             <Label htmlFor="province">Province</Label>
             <Select
@@ -354,7 +385,7 @@ export function OnboardingWizard({
       )}
 
       {step === 2 && (
-        <div className="grid gap-6 md:grid-cols-2">
+        <div className="grid gap-6 md:grid-cols-2 animate-fade-slide">
           <div className="space-y-2">
             <Label htmlFor="mentorshipStyle">Preferred mentorship style</Label>
             <Select
@@ -412,7 +443,7 @@ export function OnboardingWizard({
               <Label>Mentee goals</Label>
               <Textarea
                 rows={4}
-                placeholder="Share your goals, e.g. developing rural rehab pathways, preparing for exit exams…"
+                placeholder="Share your goals, e.g. developing rural rehab pathways, preparing for exit examsâ€¦"
                 value={(form.watch('menteeGoals') ?? []).join('\n')}
                 onChange={(event) =>
                   form.setValue(
@@ -427,7 +458,7 @@ export function OnboardingWizard({
       )}
 
       {step === 3 && (
-        <div className="space-y-4">
+        <div className="space-y-4 animate-fade-slide">
           <div className="flex items-start gap-3">
             <Checkbox
               checked={consentedPolicies}
@@ -476,10 +507,11 @@ export function OnboardingWizard({
           </Button>
         ) : (
           <Button type="submit" disabled={mutation.isPending}>
-            {mutation.isPending ? 'Saving…' : 'Complete onboarding'}
+            {mutation.isPending ? 'Savingâ€¦' : 'Complete onboarding'}
           </Button>
         )}
       </div>
     </form>
   );
 }
+

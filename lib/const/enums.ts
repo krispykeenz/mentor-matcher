@@ -73,3 +73,6 @@ export const REPORT_CATEGORIES = [
   'Inappropriate Content',
   'Other',
 ] as const;
+
+// Basic gender options used in profile and discovery filters
+export const GENDERS = ['Male', 'Female'] as const;
