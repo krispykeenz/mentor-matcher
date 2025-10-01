@@ -26,10 +26,8 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <Providers>
           <main className="pb-20 md:pb-0 md:pt-16">{children}</main>
           {/* Mobile primary navigation */}
-          {/* @ts-expect-error Server-to-client import is allowed for client components */}
           <MobileNavSlot />
           {/* Desktop top navigation */}
-          {/* @ts-expect-error Server-to-client import is allowed for client components */}
           <TopNavSlot />
           <Toaster />
         </Providers>
