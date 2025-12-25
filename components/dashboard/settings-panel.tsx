@@ -1,9 +1,20 @@
-import { getCurrentUserProfile } from '@/lib/server/profile-actions';
+'use client';
+
+import useSWR from 'swr';
 import { Card, CardContent } from '@/components/ui/card';
 import { Switch } from '@/components/ui/switch';
 
-export async function SettingsPanel() {
-  const profile = await getCurrentUserProfile();
+const fetcher = async (url: string) => {
+  const res = await fetch(url);
+  if (!res.ok) {
+    throw new Error('Failed to load settings');
+  }
+  return res.json();
+};
+
+export function SettingsPanel() {
+  const { data } = useSWR('/api/profile', fetcher);
+  const profile = data?.profile as any | null | undefined;
 
   return (
     <div className="mt-8 space-y-6">

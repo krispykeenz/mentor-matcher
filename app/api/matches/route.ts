@@ -30,9 +30,6 @@ export async function GET() {
         ].map((doc) => doc.data() as any)
       : snapshot.docs.map((doc) => doc.data() as any);
 
-    // Filter out hidden matches for this user
-    matches = matches.filter((m: any) => !Array.isArray(m.hiddenFor) || !m.hiddenFor.includes(userId));
-
     // Compute unread counts (recent messages) and add participant names/photos
     const ids = new Set<string>();
     matches.forEach((m: any) => {

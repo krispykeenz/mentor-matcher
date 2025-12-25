@@ -13,6 +13,7 @@ import {
   signInWithPopup,
 } from 'firebase/auth';
 import { initializeClientFirebase } from '@/lib/firebase/client';
+import { isDemoMode } from '@/lib/demo/demo-mode';
 import { useRouter } from 'next/navigation';
 import Cookies from 'js-cookie';
 
@@ -46,6 +47,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const router = useRouter();
 
   const auth = useMemo(() => {
+    if (isDemoMode) return null;
     if (typeof window !== 'undefined') {
       initializeClientFirebase();
       return getAuth();
@@ -54,6 +56,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   useEffect(() => {
+    if (isDemoMode) {
+      setUser({
+        uid: 'demo-user-1',
+        email: 'demo@mentormatch.local',
+        displayName: 'Demo User',
+        photoURL: null,
+        isAdmin: true,
+      });
+      setLoading(false);
+      return;
+    }
+
     if (!auth) {
       setLoading(false);
       return;
@@ -99,6 +113,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       user,
       loading,
       signOutUser: async () => {
+        if (isDemoMode) {
+          Cookies.remove('onboarding');
+          setUser(null);
+          router.push('/');
+          return;
+        }
+
         if (!auth) throw new Error('Firebase not initialized');
         await signOut(auth);
         await fetch('/api/auth/logout', { method: 'POST' }).catch(
@@ -111,6 +132,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         email: string,
         options?: { mode?: AuthFlowMode },
       ) => {
+        if (isDemoMode) {
+          const normalizedEmail = email.trim().toLowerCase();
+          window.localStorage.setItem('emailForSignIn', normalizedEmail);
+          window.localStorage.setItem('authFlow', options?.mode ?? 'sign-in');
+          // In demo mode we don't send emails; we simply keep state local.
+          setUser({
+            uid: 'demo-user-1',
+            email: normalizedEmail,
+            displayName: normalizedEmail.split('@')[0] ?? 'Demo User',
+            photoURL: null,
+            isAdmin: true,
+          });
+          return;
+        }
+
         if (!auth) throw new Error('Firebase not initialized');
         const normalizedEmail = email.trim();
         const callbackUrl = new URL('/complete', window.location.origin);
@@ -125,6 +161,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         window.localStorage.setItem('authFlow', mode);
       },
       signInWithMagicLink: async (email: string, link?: string) => {
+        if (isDemoMode) {
+          const normalizedEmail = email.trim().toLowerCase();
+          setUser({
+            uid: 'demo-user-1',
+            email: normalizedEmail,
+            displayName: normalizedEmail.split('@')[0] ?? 'Demo User',
+            photoURL: null,
+            isAdmin: true,
+          });
+          window.localStorage.removeItem('emailForSignIn');
+          window.localStorage.removeItem('authFlow');
+          return;
+        }
+
         if (!auth) throw new Error('Firebase not initialized');
         const signInEmail =
           email || window.localStorage.getItem('emailForSignIn') || '';
@@ -153,6 +203,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         window.localStorage.removeItem('authFlow');
       },
       signInWithGoogle: async () => {
+        if (isDemoMode) {
+          setUser({
+            uid: 'demo-user-1',
+            email: 'demo@mentormatch.local',
+            displayName: 'Demo User',
+            photoURL: null,
+            isAdmin: true,
+          });
+          router.push('/discover');
+          return;
+        }
+
         if (!auth) throw new Error('Firebase not initialized');
         const provider = new GoogleAuthProvider();
         await signInWithPopup(auth, provider);

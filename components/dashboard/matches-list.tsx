@@ -1,87 +1,47 @@
-import { getAdminServices } from '@/lib/firebase/server';
-import { cookies } from 'next/headers';
+'use client';
+
+import useSWR from 'swr';
 import Link from 'next/link';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Avatar } from '@/components/ui/avatar';
 import { MatchActions } from '@/components/dashboard/match-actions';
+import { useAuth } from '@/lib/auth/auth-context';
 
-async function fetchMatches() {
-  const session = cookies().get('__session');
-  if (!session) return [] as any[];
-  const { db, auth } = getAdminServices();
-  const decoded = await auth.verifySessionCookie(session.value);
-  const snapshot = await db
-    .collection('matches')
-    .where('participants', 'array-contains', decoded.uid)
-    .get();
-  let matches = snapshot.empty
-    ? [
-        ...(
-          await db
-            .collection('matches')
-            .where('mentorId', '==', decoded.uid)
-            .get()
-        ).docs,
-        ...(
-          await db
-            .collection('matches')
-            .where('menteeId', '==', decoded.uid)
-            .get()
-        ).docs,
-      ].map((doc) => doc.data())
-    : snapshot.docs.map((doc) => doc.data());
+const fetcher = async (url: string) => {
+  const res = await fetch(url);
+  if (!res.ok) {
+    throw new Error('Failed to load matches');
+  }
+  return res.json();
+};
 
-  // Enrich with avatar URLs and names from profiles_public
-  const ids = new Set<string>();
-  matches.forEach((m: any) => {
-    if (m.mentorId) ids.add(m.mentorId);
-    if (m.menteeId) ids.add(m.menteeId);
+export function MatchesList() {
+  const { user, loading } = useAuth();
+  const { data } = useSWR(user ? '/api/matches' : null, fetcher, {
+    refreshInterval: 10000,
   });
-  const profileDocs = await Promise.all(
-    Array.from(ids).map((id) => db.collection('profiles_public').doc(id).get()),
-  );
-  const profileMap = new Map(
-    profileDocs
-      .filter((d) => d.exists)
-      .map((d) => [d.id, d.data() as any]),
-  );
 
-  matches = matches.map((m: any) => ({
-    ...m,
-    mentorName: m.mentorName || profileMap.get(m.mentorId)?.fullName || 'Mentor',
-    menteeName: m.menteeName || profileMap.get(m.menteeId)?.fullName || 'Mentee',
-    mentorPhoto: profileMap.get(m.mentorId)?.photoUrl || null,
-    menteePhoto: profileMap.get(m.menteeId)?.photoUrl || null,
-  }));
+  if (loading) {
+    return (
+      <p className="mt-6 text-sm text-slate-500">Loading matches…</p>
+    );
+  }
 
-  return matches;
-}
+  if (!user) {
+    return (
+      <div className="mt-6 rounded-2xl border border-slate-200 bg-white p-6 text-sm text-slate-600">
+        Please sign in to view your mentorship matches.
+      </div>
+    );
+  }
 
-export async function MatchesList() {
-  const matches = await fetchMatches();
+  const matches = data?.matches ?? [];
+  const userId = user.uid;
 
-  const userId = (await (async () => {
-    try {
-      const { cookies } = await import('next/headers');
-      const { getAdminServices } = await import('@/lib/firebase/server');
-      const session = cookies().get('__session');
-      if (!session) return null;
-      const { auth } = getAdminServices();
-      const decoded = await auth.verifySessionCookie(session.value);
-      return decoded.uid as string;
-    } catch {
-      return null;
-    }
-  })());
-
-  const [activeMatches, archivedMatches] = (() => {
-    const hiddenFor = (m: any) => Array.isArray(m.hiddenFor) ? m.hiddenFor : [];
-    return [
-      matches.filter((m: any) => !hiddenFor(m).includes(userId)),
-      matches.filter((m: any) => hiddenFor(m).includes(userId)),
-    ];
-  })();
+  const hiddenFor = (m: any) => (Array.isArray(m.hiddenFor) ? m.hiddenFor : []);
+  const activeMatches = matches.filter((m: any) => !hiddenFor(m).includes(userId));
+  const archivedMatches = matches.filter((m: any) => hiddenFor(m).includes(userId));
 
   return (
     <div className="mt-6 grid gap-8">

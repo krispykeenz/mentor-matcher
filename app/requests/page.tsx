@@ -1,11 +1,8 @@
-import { Suspense } from 'react';
+'use client';
+
 import { RequestLists } from '@/components/dashboard/request-lists';
-import { requireAuth } from '@/lib/server/auth-guard';
 
-export const dynamic = 'force-dynamic';
-
-export default async function RequestsPage() {
-  await requireAuth(); // Ensure user is authenticated
+export default function RequestsPage() {
   return (
     <div className="min-h-screen bg-sand-50">
       <div className="mx-auto w-full max-w-4xl px-4 py-8">
@@ -15,13 +12,7 @@ export default async function RequestsPage() {
         <p className="text-sm text-slate-600">
           Review requests you have sent and received.
         </p>
-        <Suspense
-          fallback={
-            <p className="mt-6 text-sm text-slate-500">Loading requests…</p>
-          }
-        >
-          <RequestLists />
-        </Suspense>
+        <RequestLists />
       </div>
     </div>
   );

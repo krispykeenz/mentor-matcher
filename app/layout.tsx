@@ -4,16 +4,22 @@ import type { ReactNode } from 'react';
 import { Toaster } from '@/components/ui/toaster';
 import { Providers } from '@/components/layout/providers';
 
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
+
 export const metadata: Metadata = {
   title: 'MentorMatch SA',
   description:
     'Mobile-first mentorship matching for South African community service health professionals.',
-  manifest: '/manifest.webmanifest',
+  manifest: `${basePath}/manifest.webmanifest`,
   icons: [
-    { rel: 'icon', url: '/icons/icon-192x192.svg', type: 'image/svg+xml' },
+    {
+      rel: 'icon',
+      url: `${basePath}/icons/icon-192x192.svg`,
+      type: 'image/svg+xml',
+    },
     {
       rel: 'apple-touch-icon',
-      url: '/icons/icon-192x192.svg',
+      url: `${basePath}/icons/icon-192x192.svg`,
       type: 'image/svg+xml',
     },
   ],

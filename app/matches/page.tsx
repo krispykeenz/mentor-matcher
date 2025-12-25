@@ -1,11 +1,8 @@
-import { Suspense } from 'react';
+'use client';
+
 import { MatchesList } from '@/components/dashboard/matches-list';
-import { requireAuth } from '@/lib/server/auth-guard';
 
-export const dynamic = 'force-dynamic';
-
-export default async function MatchesPage() {
-  await requireAuth(); // Ensure user is authenticated
+export default function MatchesPage() {
   return (
     <div className="min-h-screen bg-sand-50">
       <div className="mx-auto w-full max-w-5xl px-4 py-8">
@@ -15,13 +12,7 @@ export default async function MatchesPage() {
         <p className="text-sm text-slate-600">
           Manage and continue conversations with your mentors and mentees.
         </p>
-        <Suspense
-          fallback={
-            <p className="mt-6 text-sm text-slate-500">Loading matches…</p>
-          }
-        >
-          <MatchesList />
-        </Suspense>
+        <MatchesList />
       </div>
     </div>
   );

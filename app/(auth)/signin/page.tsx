@@ -1,7 +1,9 @@
 ﻿'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/auth/auth-context';
+import { isDemoMode } from '@/lib/demo/demo-mode';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -17,6 +19,7 @@ const MODES = [
 type Mode = (typeof MODES)[number]['id'];
 
 export default function SignInPage() {
+  const router = useRouter();
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
   const [mode, setMode] = useState<Mode>('sign-in');
@@ -37,6 +40,12 @@ export default function SignInPage() {
     const trimmedEmail = email.trim();
     const normalizedEmail = trimmedEmail.toLowerCase();
     try {
+      if (isDemoMode) {
+        toast.success('Demo mode enabled — signing you in locally.');
+        router.push('/discover');
+        return;
+      }
+
       if (!trimmedEmail) {
         toast.error('Please enter your email address.');
         return;
@@ -130,9 +139,9 @@ export default function SignInPage() {
                 id="email"
                 type="email"
                 value={email}
-                required
+                required={!isDemoMode}
                 onChange={(event) => setEmail(event.target.value)}
-                placeholder="you@healthmail.co.za"
+                placeholder={isDemoMode ? 'Optional in demo mode' : 'you@healthmail.co.za'}
               />
             </div>
             <Button type="submit" className="w-full" disabled={loading}>

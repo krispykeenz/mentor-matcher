@@ -1,9 +1,21 @@
 import withPWA from 'next-pwa';
 
 const isDev = process.env.NODE_ENV === 'development';
+const isDemo = process.env.NEXT_PUBLIC_DEMO_MODE === 'true';
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
 
 const config = {
+  ...(isDemo
+    ? {
+        // GitHub Pages static hosting
+        output: 'export',
+        trailingSlash: true,
+        basePath,
+        assetPrefix: basePath,
+      }
+    : {}),
   images: {
+    ...(isDemo ? { unoptimized: true } : {}),
     remotePatterns: [
       {
         protocol: 'https',
@@ -29,7 +41,7 @@ const config = {
 
 export default withPWA({
   dest: 'public',
-  disable: isDev,
+  disable: isDev || isDemo,
   register: true,
   skipWaiting: true,
 })(config);
